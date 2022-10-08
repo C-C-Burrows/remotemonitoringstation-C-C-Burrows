@@ -1,3 +1,5 @@
+#include <Arduino.h>
+#line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 #include "sensitiveInformation.h"
 
 #define FORMAT_SPIFFS_IF_FAILED true
@@ -263,3 +265,160 @@ void windowBlindSetup() {
   myservo.setPeriodHertz(50);    // standard 50 hz servo
   myservo.attach(servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
 }
+
+#line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
+//SPIFFS File Functions
+void readFile(fs::FS &fs, const char * path) {
+  Serial.printf("Reading file: %s\r\n", path);
+
+  File file = fs.open(path);
+  if (!file || file.isDirectory()) {
+    Serial.println("- failed to open file for reading");
+    return;
+  }
+
+  //  Serial.println("- read from file:");
+  while (file.available()) {
+    Serial.write(file.read());
+  }
+  file.close();
+}
+
+void writeFile(fs::FS &fs, const char * path, const char * message) {
+  Serial.printf("Writing file: %s\r\n", path);
+
+  File file = fs.open(path, FILE_WRITE);
+  if (!file) {
+    Serial.println("- failed to open file for writing");
+    return;
+  }
+  if (file.print(message)) {
+    delay(1);
+    //    Serial.println("- file written");
+  } else {
+    Serial.println("- write failed");
+  }
+  file.close();
+}
+
+void appendFile(fs::FS &fs, const char * path, const char * message) {
+  //  Serial.printf("Appending to file: %s\r\n", path);
+
+  File file = fs.open(path, FILE_APPEND);
+  if (!file) {
+    Serial.println("- failed to open file for appending");
+    return;
+  }
+  if (file.print(message)) {
+    delay(1);
+    //Serial.println("- message appended");
+  } else {
+    Serial.println("- append failed");
+  }
+  file.close();
+}
+
+void renameFile(fs::FS &fs, const char * path1, const char * path2) {
+  Serial.printf("Renaming file %s to %s\r\n", path1, path2);
+  if (fs.rename(path1, path2)) {
+    delay(1);
+    //Serial.println("- file renamed");
+  } else {
+    Serial.println("- rename failed");
+  }
+}
+
+void deleteFile(fs::FS &fs, const char * path) {
+  Serial.printf("Deleting file: %s\r\n", path);
+  if (fs.remove(path)) {
+    Serial.println("- file deleted");
+  } else {
+    Serial.println("- delete failed");
+  }
+}
+
+#line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+void routesConfiguration() {
+
+  // Example of a 'standard' route
+  // No Authentication
+  server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest * request) {
+    logEvent("route: /");
+    request->send(SPIFFS, "/index.html", "text/html");
+  });
+
+  // Duplicated serving of index.html route, so the IP can be entered directly to browser.
+  // No Authentication
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
+    logEvent("route: /");
+    request->send(SPIFFS, "/index.html", "text/html");
+  });
+
+  // Example of linking to an external file
+  server.on("/arduino.css", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/arduino.css", "text/css");
+  });
+
+
+  // Example of a route with additional authentication (popup in browser)
+  // And uses the processor function.
+  server.on("/dashboard.html", HTTP_GET, [](AsyncWebServerRequest * request) {
+    if (!request->authenticate(http_username, http_password))
+      return request->requestAuthentication();
+    logEvent("Dashboard");
+    request->send(SPIFFS, "/dashboard.html", "text/html", false, processor);
+  });
+
+
+  // Example of route with authentication, and use of processor
+  // Also demonstrates how to have arduino functionality included (turn LED on)
+  server.on("/LEDOn", HTTP_GET, [](AsyncWebServerRequest * request) {
+    if (!request->authenticate(http_username, http_password))
+      return request->requestAuthentication();
+    LEDOn = true;
+    request->send(SPIFFS, "/dashboard.html", "text/html", false, processor);
+  });
+
+
+  server.on("/LEDOff", HTTP_GET, [](AsyncWebServerRequest * request) {
+    if (!request->authenticate(http_username, http_password))
+      return request->requestAuthentication();
+    LEDOn = false;
+    request->send(SPIFFS, "/dashboard.html", "text/html", false, processor);
+  });
+
+
+  // Example of route which sets file to download - 'true' in send() command.
+  server.on("/logOutput", HTTP_GET, [](AsyncWebServerRequest * request) {
+    if (!request->authenticate(http_username, http_password))
+      return request->requestAuthentication();
+    logEvent("Log Event Download");
+    request->send(SPIFFS, "/logEvents.csv", "text/html", true);
+  });
+}
+
+String getDateTime() {
+  DateTime rightNow = rtc.now();
+  char csvReadableDate[25];
+  sprintf(csvReadableDate, "%02d:%02d:%02d %02d/%02d/%02d",  rightNow.hour(), rightNow.minute(), rightNow.second(), rightNow.day(), rightNow.month(), rightNow.year());
+  return csvReadableDate;
+}
+
+String processor(const String& var) {
+  /*
+     Updates the HTML by replacing set variables with return value from here.
+     For example:
+     in HTML file include %VARIABLEVALUE%.
+     In this function, have:
+      if (var=="VARIABLEVALUE") { return "5";}
+  */
+
+  if (var == "DATETIME") {
+    String datetime = getDateTime();
+    return datetime;
+  }
+
+  // Default "catch" which will return nothing in case the HTML has no variable to replace.
+  return String();
+}
+
