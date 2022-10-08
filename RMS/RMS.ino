@@ -79,6 +79,16 @@ void builtinLED() {
   }
 }
 
+void debugPrint(String debugString){
+  debugPrint(debugString,true);
+}
+
+void debugPrint(String debugString, bool newline){
+  Serial.print (debugString);
+  if (newline){
+    Serial.println();
+  }
+}
 void logEvent(String dataToLog) {
   /*
      Log entries to a file stored in SPIFFS partition on the ESP32.
@@ -109,20 +119,21 @@ void readAndDisplayTemperature()
   // Read and print out the temperature, then convert to *F
   float c = tempsensor.readTempC();
   float f = c * 9.0 / 5.0 + 32;
-  Serial.print("Temp: "); Serial.print(c); Serial.print("*C\t");
-  Serial.print(f); Serial.println("*F");
+  debugPrint("Temp: " + (String)c + "*C \t" + (String)f + "*F");
   String tempInC = String(c);
   tftDrawText(tempInC, ST77XX_WHITE);
   delay(100);
 }
 
 void tftDrawText(String text, uint16_t color) {
+  debugPrint("Start DrawText");
   tft.fillScreen(ST77XX_BLACK);
   tft.setCursor(0, 0);
   tft.setTextSize(3);
   tft.setTextColor(color);
   tft.setTextWrap(true);
   tft.print(text);
+  debugPrint("End DrawText");
 }
 
 
@@ -140,19 +151,19 @@ void automaticFan(float temperatureThreshold) {
 
 void windowBlinds() {
   uint32_t buttons = ss.readButtons();
-  Serial.println ("blinds " + buttons);
+  debugPrint("blinds " + buttons);
   if (! (buttons & TFTWING_BUTTON_A)) {
-    Serial.println ("blinds button");
+    debugPrint("blinds button");
     if (blindsOpen) {
-      Serial.println ("blinds Open");
+      debugPrint("blinds Open");
       myservo.write(0);
     } else {
       myservo.write(180);
-         Serial.println ("blinds Closed");
+         debugPrint("blinds Closed");
     }
     blindsOpen = !blindsOpen;
   }else{
-    Serial.println ("buttons " + buttons);
+    debugPrint("buttons " + buttons);
   }
 }
 
@@ -162,10 +173,10 @@ void temperatureSetup()
   Serial.begin(9600);
 
   if (!ss.begin()) {
-    Serial.println("seesaw init error!");
+    debugPrint("seesaw init error!");
     while (1);
   }
-  else Serial.println("seesaw started");
+  else debugPrint("seesaw started");
 
   ss.tftReset();
   ss.setBacklight(0x0); //set the backlight fully on
