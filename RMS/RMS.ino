@@ -29,6 +29,11 @@ Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
 
+// Motor Shield START
+#include <Adafruit_MotorShield.h>
+Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
+Adafruit_DCMotor *myMotor = AFMS.getMotor(3);
+// Motor Shield END
 
 // RTC Start - Remove if unnecessary
 #include "RTClib.h"
@@ -50,7 +55,7 @@ void setup() {
 void loop() {
   builtinLED();
   delay(LOOPDELAY); // To allow time to publish new code.
-  tempLoopCode();
+  readAndDisplayTemperature();
   
 }
 
@@ -88,7 +93,7 @@ void logEvent(String dataToLog) {
 
 //Temp Code
 
-void tempLoopCode()
+void readAndDisplayTemperature()
 {
    // Read and print out the temperature, then convert to *F
   float c = tempsensor.readTempC();
@@ -97,7 +102,7 @@ void tempLoopCode()
   Serial.print(f); Serial.println("*F");
   String tempInC = String(c);
   tftDrawText(tempInC, ST77XX_WHITE);
-  delay(1000);
+  delay(100);
 }
 
 void tftDrawText(String text, uint16_t color) {
