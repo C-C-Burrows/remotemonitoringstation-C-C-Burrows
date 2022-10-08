@@ -67,7 +67,7 @@ void loop()
   readAndDisplayTemperature();
   automaticFan(20.0);
   windowBlinds();
-  debugPrint("We are                  herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrre!");
+  debugPrint("We are here!");
 }
 
 void builtinLED()
