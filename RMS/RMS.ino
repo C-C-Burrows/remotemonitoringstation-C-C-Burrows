@@ -50,6 +50,8 @@ void setup() {
 void loop() {
   builtinLED();
   delay(LOOPDELAY); // To allow time to publish new code.
+  tempLoopCode();
+  
 }
 
 
@@ -84,6 +86,30 @@ void logEvent(String dataToLog) {
   Serial.println(logEntry);
 }
 
+//Temp Code
+
+void tempLoopCode()
+{
+   // Read and print out the temperature, then convert to *F
+  float c = tempsensor.readTempC();
+  float f = c * 9.0 / 5.0 + 32;
+  Serial.print("Temp: "); Serial.print(c); Serial.print("*C\t");
+  Serial.print(f); Serial.println("*F");
+  String tempInC = String(c);
+  tftDrawText(tempInC, ST77XX_WHITE);
+  delay(1000);
+}
+
+void tftDrawText(String text, uint16_t color) {
+  tft.fillScreen(ST77XX_BLACK);
+  tft.setCursor(0, 0);
+  tft.setTextSize(3);
+  tft.setTextColor(color);
+  tft.setTextWrap(true);
+  tft.print(text);
+}
+
+//All Sensor Setup Code
 void temperatureSetup()
 {
   Serial.begin(9600);
