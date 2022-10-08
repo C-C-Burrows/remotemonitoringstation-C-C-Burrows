@@ -140,13 +140,19 @@ void automaticFan(float temperatureThreshold) {
 
 void windowBlinds() {
   uint32_t buttons = ss.readButtons();
+  Serial.println ("blinds " + buttons);
   if (! (buttons & TFTWING_BUTTON_A)) {
+    Serial.println ("blinds button");
     if (blindsOpen) {
+      Serial.println ("blinds Open");
       myservo.write(0);
     } else {
       myservo.write(180);
+         Serial.println ("blinds Closed");
     }
     blindsOpen = !blindsOpen;
+  }else{
+    Serial.println ("buttons " + buttons);
   }
 }
 
