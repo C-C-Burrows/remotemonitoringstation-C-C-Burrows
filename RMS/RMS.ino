@@ -31,9 +31,16 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
 
 // Motor Shield START
 #include <Adafruit_MotorShield.h>
-Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *myMotor = AFMS.getMotor(4);
 // Motor Shield END
+
+// ESP32Servo Start
+#include <ESP32Servo.h>
+Servo myservo;  // create servo object to control a servo
+int servoPin = 12;
+boolean blindsOpen = false;
+// ESP32Servo End
 
 // RTC Start - Remove if unnecessary
 #include "RTClib.h"
@@ -51,6 +58,7 @@ void setup() {
   temperatureSetup();
   spiffWifiSetup();
   motorSetup();
+  windowBlindSetup();
 }
 
 void loop() {
@@ -58,7 +66,8 @@ void loop() {
   delay(LOOPDELAY); // To allow time to publish new code.
   readAndDisplayTemperature();
   automaticFan(20.0);
-  
+  windowBlinds();
+
 }
 
 
@@ -97,7 +106,7 @@ void logEvent(String dataToLog) {
 
 void readAndDisplayTemperature()
 {
-   // Read and print out the temperature, then convert to *F
+  // Read and print out the temperature, then convert to *F
   float c = tempsensor.readTempC();
   float f = c * 9.0 / 5.0 + 32;
   Serial.print("Temp: "); Serial.print(c); Serial.print("*C\t");
@@ -119,13 +128,25 @@ void tftDrawText(String text, uint16_t color) {
 
 void automaticFan(float temperatureThreshold) {
   float c = tempsensor.readTempC();
-  myMotor->setSpeed(100); 
+  myMotor->setSpeed(100);
   if (c < temperatureThreshold) {
     myMotor->run(RELEASE);
     Serial.println("stop");
   } else {
     myMotor->run(FORWARD);
     Serial.println("forward");
+  }
+}
+
+void windowBlinds() {
+  uint32_t buttons = ss.readButtons();
+  if (! (buttons & TFTWING_BUTTON_A)) {
+    if (blindsOpen) {
+      myservo.write(0);
+    } else {
+      myservo.write(180);
+    }
+    blindsOpen = !blindsOpen;
   }
 }
 
@@ -208,6 +229,17 @@ void spiffWifiSetup()
 }
 
 // Motor Shield Start
-void motorSetup(){
+void motorSetup() {
   AFMS.begin(); // Motor Shield Start
+}
+
+// window Blind Control subsytem
+
+void windowBlindSetup() {
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+  myservo.setPeriodHertz(50);    // standard 50 hz servo
+  myservo.attach(servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
 }
