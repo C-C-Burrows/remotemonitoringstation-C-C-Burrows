@@ -32,7 +32,7 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
 // Motor Shield START
 #include <Adafruit_MotorShield.h>
 Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
-Adafruit_DCMotor *myMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *myMotor = AFMS.getMotor(4);
 // Motor Shield END
 
 // RTC Start - Remove if unnecessary
@@ -50,12 +50,14 @@ boolean LEDOn = false; // State of Built-in LED true=on, false=off.
 void setup() {
   temperatureSetup();
   spiffWifiSetup();
+  motorSetup();
 }
 
 void loop() {
   builtinLED();
   delay(LOOPDELAY); // To allow time to publish new code.
   readAndDisplayTemperature();
+  automaticFan(20.0);
   
 }
 
@@ -112,6 +114,19 @@ void tftDrawText(String text, uint16_t color) {
   tft.setTextColor(color);
   tft.setTextWrap(true);
   tft.print(text);
+}
+
+
+void automaticFan(float temperatureThreshold) {
+  float c = tempsensor.readTempC();
+  myMotor->setSpeed(100); 
+  if (c < temperatureThreshold) {
+    myMotor->run(RELEASE);
+    Serial.println("stop");
+  } else {
+    myMotor->run(FORWARD);
+    Serial.println("forward");
+  }
 }
 
 //All Sensor Setup Code
@@ -190,4 +205,9 @@ void spiffWifiSetup()
   rtc.start();
   pinMode(LED_BUILTIN, OUTPUT);
 
+}
+
+// Motor Shield Start
+void motorSetup(){
+  AFMS.begin(); // Motor Shield Start
 }
