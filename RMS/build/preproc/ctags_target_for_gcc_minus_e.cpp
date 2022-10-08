@@ -11,15 +11,12 @@
 
 AsyncWebServer server(80);
 
-
-
-//Temperature Includes and setup
+// Temperature Includes and setup
+# 15 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 16 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 17 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 18 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 19 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
-# 20 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
-# 21 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
-
 
 Adafruit_miniTFTWing ss;
 
@@ -32,20 +29,20 @@ Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 Adafruit_ST7735 tft = Adafruit_ST7735(14, 32, -1 /* we use the seesaw for resetting to save a pin*/);
 
 // Motor Shield START
-# 35 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 32 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *myMotor = AFMS.getMotor(4);
 // Motor Shield END
 
 // ESP32Servo Start
-# 41 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 38 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 Servo myservo; // create servo object to control a servo
 int servoPin = 12;
 boolean blindsOpen = false;
 // ESP32Servo End
 
 // RTC Start - Remove if unnecessary
-# 48 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 45 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 
 RTC_PCF8523 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -55,8 +52,8 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 boolean LEDOn = false; // State of Built-in LED true=on, false=off.
 
 
-
-void setup() {
+void setup()
+{
 
   temperatureSetup();
   spiffWifiSetup();
@@ -64,43 +61,49 @@ void setup() {
   windowBlindSetup();
 }
 
-void loop() {
+void loop()
+{
   builtinLED();
   delay(100); // To allow time to publish new code.
   readAndDisplayTemperature();
   automaticFan(20.0);
   windowBlinds();
-  debugPrint("We are                  herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrre!")
-
+  debugPrint("We are                  herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrre!");
 }
 
-
-void builtinLED() {
-  if (LEDOn) {
+void builtinLED()
+{
+  if (LEDOn)
+  {
     digitalWrite(LED_BUILTIN, 0x1);
-  } else {
+  }
+  else
+  {
     digitalWrite(LED_BUILTIN, 0x0);
   }
 }
 
-
-void debugPrint(String debugString){
-  debugPrint(debugString,true);
+void debugPrint(String debugString)
+{
+  debugPrint(debugString, true);
 }
 
-void debugPrint(String debugString, bool newline){
-  Serial.print (debugString);
-  if (newline){
+void debugPrint(String debugString, bool newline)
+{
+  Serial.print(debugString);
+  if (newline)
+  {
     Serial.println();
   }
 }
-void logEvent(String dataToLog) {
+void logEvent(String dataToLog)
+{
   /*
 
      Log entries to a file stored in SPIFFS partition on the ESP32.
 
   */
-# 100 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 103 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   // Get the updated/current time
   DateTime rightNow = rtc.now();
   char csvReadableDate[25];
@@ -108,9 +111,9 @@ void logEvent(String dataToLog) {
 
   String logTemp = csvReadableDate + dataToLog + "\n"; // Add the data to log onto the end of the date/time
 
-  const char * logEntry = logTemp.c_str(); //convert the logtemp to a char * variable
+  const char *logEntry = logTemp.c_str(); // convert the logtemp to a char * variable
 
-  //Add the log entry to the end of logevents.csv
+  // Add the log entry to the end of logevents.csv
   appendFile(SPIFFS, "/logEvents.csv", logEntry);
 
   // Output the logEvents - FOR DEBUG ONLY. Comment out to avoid spamming the serial monitor.
@@ -120,7 +123,7 @@ void logEvent(String dataToLog) {
   Serial.println(logEntry);
 }
 
-//Temp Code
+// Temp Code
 
 void readAndDisplayTemperature()
 {
@@ -133,7 +136,8 @@ void readAndDisplayTemperature()
   delay(100);
 }
 
-void tftDrawText(String text, uint16_t color) {
+void tftDrawText(String text, uint16_t color)
+{
   debugPrint("Start DrawText");
   tft.fillScreen(0x0000);
   tft.setCursor(0, 0);
@@ -144,50 +148,63 @@ void tftDrawText(String text, uint16_t color) {
   debugPrint("End DrawText");
 }
 
-
-void automaticFan(float temperatureThreshold) {
+void automaticFan(float temperatureThreshold)
+{
   float c = tempsensor.readTempC();
   myMotor->setSpeed(100);
-  if (c < temperatureThreshold) {
+  if (c < temperatureThreshold)
+  {
     myMotor->run(4);
     Serial.println("stop");
-  } else {
+  }
+  else
+  {
     myMotor->run(1);
     Serial.println("forward");
   }
 }
 
-void windowBlinds() {
+void windowBlinds()
+{
   uint32_t buttons = ss.readButtons();
   debugPrint("blinds " + buttons);
-  if (! (buttons & (1UL << 10))) {
+  if (!(buttons & (1UL << 10)))
+  {
     debugPrint("blinds button");
-    if (blindsOpen) {
+    if (blindsOpen)
+    {
       debugPrint("blinds Open");
       myservo.write(0);
-    } else {
+    }
+    else
+    {
       myservo.write(180);
-         debugPrint("blinds Closed");
+      debugPrint("blinds Closed");
     }
     blindsOpen = !blindsOpen;
-  }else{
+  }
+  else
+  {
     debugPrint("buttons " + buttons);
   }
 }
 
-//All Sensor Setup Code
+// All Sensor Setup Code
 void temperatureSetup()
 {
   Serial.begin(9600);
 
-  if (!ss.begin()) {
+  if (!ss.begin())
+  {
     debugPrint("seesaw init error!");
-    while (1);
+    while (1)
+      ;
   }
-  else debugPrint("seesaw started");
+  else
+    debugPrint("seesaw started");
 
   ss.tftReset();
-  ss.setBacklight(0x0); //set the backlight fully on
+  ss.setBacklight(0x0); // set the backlight fully on
 
   // Use this initializer (uncomment) if you're using a 0.96" 180x60 TFT
   tft.initR(0x04); // initialize a ST7735S chip, mini display
@@ -195,14 +212,15 @@ void temperatureSetup()
   tft.setRotation(3);
   tft.fillScreen(0x0000);
 
-
   debugPrint("ADT7410 demo");
 
   // Make sure the sensor is found, you can also pass in a different i2c
   // address with tempsensor.begin(0x49) for example
-  if (!tempsensor.begin()) {
+  if (!tempsensor.begin())
+  {
     debugPrint("Couldn't find ADT7410!");
-    while (1);
+    while (1)
+      ;
   }
 
   // sensor takes 250 ms to get first readings
@@ -212,12 +230,14 @@ void temperatureSetup()
 void spiffWifiSetup()
 {
   Serial.begin(9600);
-  while (!Serial) {
+  while (!Serial)
+  {
     delay(10);
   }
   delay(1000);
 
-  if (!SPIFFS.begin(true)) {
+  if (!SPIFFS.begin(true))
+  {
     // Follow instructions in README and install
     // https://github.com/me-no-dev/arduino-esp32fs-plugin
     debugPrint("SPIFFS Mount Failed");
@@ -226,7 +246,8 @@ void spiffWifiSetup()
 
   // Wifi Configuration
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(1000);
     debugPrint("Connecting to WiFi..");
   }
@@ -239,27 +260,29 @@ void spiffWifiSetup()
   server.begin();
 
   // RTC
-  if (! rtc.begin()) {
+  if (!rtc.begin())
+  {
     debugPrint("Couldn't find RTC");
     Serial.flush();
     //    abort();
   }
 
   // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct  8 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("14:34:21"))))));
+  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct  8 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("14:42:11"))))));
   rtc.start();
   pinMode(LED_BUILTIN, 0x03);
-
 }
 
 // Motor Shield Start
-void motorSetup() {
+void motorSetup()
+{
   AFMS.begin(); // Motor Shield Start
 }
 
 // window Blind Control subsytem
 
-void windowBlindSetup() {
+void windowBlindSetup()
+{
   ESP32PWM::allocateTimer(0);
   ESP32PWM::allocateTimer(1);
   ESP32PWM::allocateTimer(2);

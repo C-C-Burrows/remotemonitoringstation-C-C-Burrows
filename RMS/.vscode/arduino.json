@@ -4,4 +4,5 @@
     "port": "COM3",
     "sketch": "RMS.ino"
     ,"output": "build"
+    ,"arduino.defaultBaudRate": 9600
 }
