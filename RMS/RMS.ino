@@ -55,6 +55,7 @@ boolean LEDOn = false; // State of Built-in LED true=on, false=off.
 
 
 void setup() {
+
   temperatureSetup();
   spiffWifiSetup();
   motorSetup();
@@ -78,6 +79,7 @@ void builtinLED() {
     digitalWrite(LED_BUILTIN, LOW);
   }
 }
+
 
 void debugPrint(String debugString){
   debugPrint(debugString,true);
@@ -188,12 +190,12 @@ void temperatureSetup()
   tft.fillScreen(ST77XX_BLACK);
 
 
-  Serial.println("ADT7410 demo");
+  debugPrint("ADT7410 demo");
 
   // Make sure the sensor is found, you can also pass in a different i2c
   // address with tempsensor.begin(0x49) for example
   if (!tempsensor.begin()) {
-    Serial.println("Couldn't find ADT7410!");
+    debugPrint("Couldn't find ADT7410!");
     while (1);
   }
 
@@ -212,7 +214,7 @@ void spiffWifiSetup()
   if (!SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED)) {
     // Follow instructions in README and install
     // https://github.com/me-no-dev/arduino-esp32fs-plugin
-    Serial.println("SPIFFS Mount Failed");
+    debugPrint("SPIFFS Mount Failed");
     return;
   }
 
@@ -220,20 +222,19 @@ void spiffWifiSetup()
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.println("Connecting to WiFi..");
+    debugPrint("Connecting to WiFi..");
   }
-  Serial.println();
-  Serial.print("Connected to the Internet");
-  Serial.print("IP address: ");
+  debugPrint("");
+  debugPrint("Connected to the Internet");
+  debugPrint("IP address: ");
   Serial.println(WiFi.localIP());
 
-  routesConfiguration(); // Reads routes from routesManagement
-
+  routesConfiguration(); // Reads routes from routesManagementln
   server.begin();
 
   // RTC
   if (! rtc.begin()) {
-    Serial.println("Couldn't find RTC");
+    debugPrint("Couldn't find RTC");
     Serial.flush();
     //    abort();
   }
