@@ -73,6 +73,12 @@ void loop()
 
 void builtinLED()
 {
+ /*
+     this is the LED it function is to turn on the LED when LEDon is True
+     and off if it is faulse.
+     @return: void
+  */
+
   if (LEDOn)
   {
     digitalWrite(LED_BUILTIN, HIGH);
@@ -85,11 +91,25 @@ void builtinLED()
 
 void debugPrint(String debugString)
 {
+  /*
+     this is debugprint it is used to print debug imfomation.
+     @return: void
+     @param debugString - String is to print debug
+  */
+
   debugPrint(debugString, true);
 }
 
 void debugPrint(String debugString, bool newline)
 {
+
+  /*
+     this is debugprint it is used to print debug imfomation.
+     @return: void
+     @param debugString - String is to print debug
+     @param newline - bool if true print new line else not
+  */
+
   Serial.print(debugString);
   if (newline)
   {
@@ -124,7 +144,11 @@ void logEvent(String dataToLog)
 
 void readAndDisplayTemperature()
 {
-  // Read and print out the temperature, then convert to *F
+  
+  /*
+    Read and print out the temperature, then convert to *F
+     @return: void
+  */
   float c = tempsensor.readTempC();
   float f = c * 9.0 / 5.0 + 32;
   debugPrint("Temp: " + (String)c + "*C \t" + (String)f + "*F");
@@ -135,6 +159,14 @@ void readAndDisplayTemperature()
 
 void tftDrawText(String text, uint16_t color)
 {
+  
+  /*
+    tftDrawingText if retures true then it prints the test if
+    it returns faules theb dose not print
+     @return: void
+     @param text
+     @param color
+  */
   debugPrint("Start DrawText");
   tft.fillScreen(ST77XX_BLACK);
   tft.setCursor(0, 0);
@@ -147,6 +179,13 @@ void tftDrawText(String text, uint16_t color)
 
 void automaticFan(float temperatureThreshold)
 {
+  
+  /*
+    automaticFan is use to read the tempretue if it is higher then c 
+    then it is forward if retuned less then c it reutns stop
+     @return: void
+     @param temperatureThreshold
+  */
   float c = tempsensor.readTempC();
   myMotor->setSpeed(100);
   if (c < temperatureThreshold)
@@ -163,6 +202,12 @@ void automaticFan(float temperatureThreshold)
 
 void windowBlinds()
 {
+  
+  /*
+    when the button is pressed it  opens the blinds when pressed again it
+    closes the blinds
+     @return: void
+  */
   uint32_t buttons = ss.readButtons();
   debugPrint("blinds " + buttons);
   if (!(buttons & TFTWING_BUTTON_A))
@@ -187,8 +232,14 @@ void windowBlinds()
 }
 
 // All Sensor Setup Code
+
 void temperatureSetup()
 {
+  
+  /*
+    this is used to read the ss. and is desplayed on the screen
+     @return: void
+  */
   Serial.begin(9600);
 
   if (!ss.begin())
@@ -226,6 +277,11 @@ void temperatureSetup()
 
 void spiffWifiSetup()
 {
+  
+  /*
+    this is a spiffWifiSetup
+     @return: void
+  */
   Serial.begin(9600);
   while (!Serial)
   {
@@ -272,7 +328,11 @@ void spiffWifiSetup()
 
 // Motor Shield Start
 void motorSetup()
-{
+{ 
+  /*
+    this is the setup code for the motor Shield
+     @return: void
+  */
   AFMS.begin(); // Motor Shield Start
 }
 
@@ -280,6 +340,11 @@ void motorSetup()
 
 void windowBlindSetup()
 {
+  
+  /*
+  this is used to set up the windowblinds
+     @return: void
+  */
   ESP32PWM::allocateTimer(0);
   ESP32PWM::allocateTimer(1);
   ESP32PWM::allocateTimer(2);
