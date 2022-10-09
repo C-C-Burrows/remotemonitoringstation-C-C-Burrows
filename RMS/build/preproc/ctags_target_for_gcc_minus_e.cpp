@@ -3,20 +3,21 @@
 
 
 
+
 // Wifi & Webserver
-# 7 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 8 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 9 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 10 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 11 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 
 AsyncWebServer server(80);
 
 // Temperature Includes and setup
-# 15 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 16 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 17 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 18 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 # 19 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 20 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 
 Adafruit_miniTFTWing ss;
 
@@ -29,20 +30,20 @@ Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 Adafruit_ST7735 tft = Adafruit_ST7735(14, 32, -1 /* we use the seesaw for resetting to save a pin*/);
 
 // Motor Shield START
-# 32 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 33 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-Adafruit_DCMotor *myMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *myMotor = AFMS.getMotor(3);
 // Motor Shield END
 
 // ESP32Servo Start
-# 38 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 39 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 Servo myservo; // create servo object to control a servo
 int servoPin = 12;
 boolean blindsOpen = false;
 // ESP32Servo End
 
 // RTC Start - Remove if unnecessary
-# 45 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
+# 46 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino" 2
 
 RTC_PCF8523 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -66,9 +67,9 @@ void loop()
   builtinLED();
   delay(100); // To allow time to publish new code.
   readAndDisplayTemperature();
-  automaticFan(20.0);
+  automaticFan(10.0);
   windowBlinds();
-  debugPrint("We are                  herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrre!");
+  logEvent("We are here!");
 }
 
 void builtinLED()
@@ -103,7 +104,7 @@ void logEvent(String dataToLog)
      Log entries to a file stored in SPIFFS partition on the ESP32.
 
   */
-# 103 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 104 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   // Get the updated/current time
   DateTime rightNow = rtc.now();
   char csvReadableDate[25];
@@ -268,7 +269,7 @@ void spiffWifiSetup()
   }
 
   // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct  8 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("14:42:11"))))));
+  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct  9 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("10:55:27"))))));
   rtc.start();
   pinMode(LED_BUILTIN, 0x03);
 }

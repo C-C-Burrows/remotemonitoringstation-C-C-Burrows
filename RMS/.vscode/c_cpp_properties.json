@@ -2,30 +2,6 @@
     "version": 4,
     "configurations": [
         {
-            "name": "Win32",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino",
-                "C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/**"
-                
-                
-            ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE",
-                "F_CPU=16000000L",
-                "ARDUINO=10805",
-                "ARDUINO_AVR_UNO",
-                "ARDUINO_ARCH_AVR"
-            ],
-            "compilerPath": "C:/Program Files (x86)/Arduino/hardware/tools/avr/bin/avr-gcc.exe",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "clang-x64"
-    
-        },
-        {
             "name": "Arduino",
             "compilerPath": "C:\\Users\\CharlotteBurrows\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\xtensa-esp32-elf-gcc\\gcc8_4_0-esp-2021r2-patch3\\bin\\xtensa-esp32-elf-g++",
             "compilerArgs": [

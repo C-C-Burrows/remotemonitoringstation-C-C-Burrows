@@ -3,4 +3,6 @@
     "board": "esp32:esp32:featheresp32",
     "port": "COM3",
     "sketch": "RMS\\RMS.ino"
+    ,"output": "build"
+    ,"arduino.defaultBaudRate": 9600
 }
