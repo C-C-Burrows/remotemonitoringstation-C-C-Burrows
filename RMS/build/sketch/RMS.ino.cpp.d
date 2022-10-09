@@ -225,4 +225,7 @@ c:\Users\CharlotteBurrows\OneDrive\ -\ Friends\ and\ Family\ Dogfood\ ozburrows.
  C:\Users\CharlotteBurrows\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.5\cores\esp32/esp32-hal-ledc.h \
  C:\Users\CharlotteBurrows\OneDrive\ -\ Friends\ and\ Family\ Dogfood\ ozburrows.com\Documents\Arduino\libraries\ESP32Servo\src/ESP32PWM.h \
  C:\Users\CharlotteBurrows\OneDrive\ -\ Friends\ and\ Family\ Dogfood\ ozburrows.com\Documents\Arduino\libraries\ESP32Servo\src/ESP32Tone.h \
- C:\Users\CharlotteBurrows\OneDrive\ -\ Friends\ and\ Family\ Dogfood\ ozburrows.com\Documents\Arduino\libraries\RTClib\src/RTClib.h
+ C:\Users\CharlotteBurrows\OneDrive\ -\ Friends\ and\ Family\ Dogfood\ ozburrows.com\Documents\Arduino\libraries\RTClib\src/RTClib.h \
+ C:\Users\CharlotteBurrows\OneDrive\ -\ Friends\ and\ Family\ Dogfood\ ozburrows.com\Documents\Arduino\libraries\MFRC522\src/MFRC522.h \
+ C:\Users\CharlotteBurrows\OneDrive\ -\ Friends\ and\ Family\ Dogfood\ ozburrows.com\Documents\Arduino\libraries\MFRC522\src/require_cpp11.h \
+ C:\Users\CharlotteBurrows\OneDrive\ -\ Friends\ and\ Family\ Dogfood\ ozburrows.com\Documents\Arduino\libraries\MFRC522\src/deprecated.h

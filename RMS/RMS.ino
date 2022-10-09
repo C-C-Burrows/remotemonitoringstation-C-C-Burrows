@@ -1,6 +1,5 @@
 #include "sensitiveInformation.h"
 
-
 #define FORMAT_SPIFFS_IF_FAILED true
 
 // Wifi & Webserver
@@ -44,6 +43,23 @@ boolean blindsOpen = false;
 // RTC Start - Remove if unnecessary
 #include "RTClib.h"
 
+// safe security subsytem
+
+#define LEDRed 27
+#define LEDGreen 33
+// RFID Start
+
+#include <SPI.h>
+#include <MFRC522.h>
+
+#define SS_PIN 21  // ES32 Feather
+#define RST_PIN 17 // esp32 Feather - SCL pin. Could be others.
+
+MFRC522 rfid(SS_PIN, RST_PIN);
+bool safeLocked = true;
+
+// RFID End
+
 RTC_PCF8523 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
@@ -59,6 +75,7 @@ void setup()
   spiffWifiSetup();
   motorSetup();
   windowBlindSetup();
+  safeSubSytem();
 }
 
 void loop()
@@ -68,16 +85,17 @@ void loop()
   readAndDisplayTemperature();
   automaticFan(10.0);
   windowBlinds();
+  readRFID();
   logEvent("We are here!");
 }
 
 void builtinLED()
 {
- /*
-     this is the LED it function is to turn on the LED when LEDon is True
-     and off if it is faulse.
-     @return: void
-  */
+  /*
+      this is the LED it function is to turn on the LED when LEDon is True
+      and off if it is faulse.
+      @return: void
+   */
 
   if (LEDOn)
   {
@@ -144,7 +162,7 @@ void logEvent(String dataToLog)
 
 void readAndDisplayTemperature()
 {
-  
+
   /*
     Read and print out the temperature, then convert to *F
      @return: void
@@ -159,7 +177,7 @@ void readAndDisplayTemperature()
 
 void tftDrawText(String text, uint16_t color)
 {
-  
+
   /*
     tftDrawingText if retures true then it prints the test if
     it returns faules theb dose not print
@@ -179,9 +197,9 @@ void tftDrawText(String text, uint16_t color)
 
 void automaticFan(float temperatureThreshold)
 {
-  
+
   /*
-    automaticFan is use to read the tempretue if it is higher then c 
+    automaticFan is use to read the tempretue if it is higher then c
     then it is forward if retuned less then c it reutns stop
      @return: void
      @param temperatureThreshold
@@ -202,7 +220,7 @@ void automaticFan(float temperatureThreshold)
 
 void windowBlinds()
 {
-  
+
   /*
     when the button is pressed it  opens the blinds when pressed again it
     closes the blinds
@@ -215,13 +233,15 @@ void windowBlinds()
     debugPrint("blinds button");
     if (blindsOpen)
     {
-      debugPrint("blinds Open");
+      logEvent("Closing Blinds");
+      debugPrint("blinds Closed");
       myservo.write(0);
     }
     else
     {
       myservo.write(180);
-      debugPrint("blinds Closed");
+      debugPrint("blinds Openned");
+      logEvent("Opening Blinds");
     }
     blindsOpen = !blindsOpen;
   }
@@ -231,11 +251,45 @@ void windowBlinds()
   }
 }
 
+void readRFID()
+{
+
+  String uidOfCardRead = "";
+  String validCardUID = "00 232 81 25";
+
+  if (rfid.PICC_IsNewCardPresent())
+  { // new tag is available
+    if (rfid.PICC_ReadCardSerial())
+    { // NUID has been readed
+      MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
+      for (int i = 0; i < rfid.uid.size; i++)
+      {
+        uidOfCardRead += rfid.uid.uidByte[i] < 0x10 ? " 0" : " ";
+        uidOfCardRead += rfid.uid.uidByte[i];
+      }
+      Serial.println(uidOfCardRead);
+
+      rfid.PICC_HaltA();      // halt PICC
+      rfid.PCD_StopCrypto1(); // stop encryption on PCD
+      uidOfCardRead.trim();
+      if (uidOfCardRead == validCardUID)
+      {
+        safeLocked = false;
+        logEvent("Safe Unlocked");
+      }
+      else
+      {
+        safeLocked = true;
+        logEvent("Safe Locked");
+      }
+    }
+  }
+}
 // All Sensor Setup Code
 
 void temperatureSetup()
 {
-  
+
   /*
     this is used to read the ss. and is desplayed on the screen
      @return: void
@@ -277,7 +331,7 @@ void temperatureSetup()
 
 void spiffWifiSetup()
 {
-  
+
   /*
     this is a spiffWifiSetup
      @return: void
@@ -328,7 +382,7 @@ void spiffWifiSetup()
 
 // Motor Shield Start
 void motorSetup()
-{ 
+{
   /*
     this is the setup code for the motor Shield
      @return: void
@@ -340,7 +394,7 @@ void motorSetup()
 
 void windowBlindSetup()
 {
-  
+
   /*
   this is used to set up the windowblinds
      @return: void
@@ -351,4 +405,16 @@ void windowBlindSetup()
   ESP32PWM::allocateTimer(3);
   myservo.setPeriodHertz(50);           // standard 50 hz servo
   myservo.attach(servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
+}
+
+void safeSubSytem()
+{
+  // RFID Start
+  SPI.begin();     // init SPI bus
+  rfid.PCD_Init(); // init MFRC522
+  // RFID End
+  pinMode(LEDRed, OUTPUT);
+  pinMode(LEDGreen, OUTPUT);
+  digitalWrite(LEDRed, LOW);
+  digitalWrite(LEDGreen, LOW);
 }

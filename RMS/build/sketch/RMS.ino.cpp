@@ -2,7 +2,6 @@
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 #include "sensitiveInformation.h"
 
-
 #define FORMAT_SPIFFS_IF_FAILED true
 
 // Wifi & Webserver
@@ -46,6 +45,23 @@ boolean blindsOpen = false;
 // RTC Start - Remove if unnecessary
 #include "RTClib.h"
 
+// safe security subsytem
+
+#define LEDRed 27
+#define LEDGreen 33
+// RFID Start
+
+#include <SPI.h>
+#include <MFRC522.h>
+
+#define SS_PIN 21  // ES32 Feather
+#define RST_PIN 17 // esp32 Feather - SCL pin. Could be others.
+
+MFRC522 rfid(SS_PIN, RST_PIN);
+bool safeLocked = true;
+
+// RFID End
+
 RTC_PCF8523 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
@@ -54,34 +70,38 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 boolean LEDOn = false; // State of Built-in LED true=on, false=off.
 #define LOOPDELAY 100
 
-#line 55 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 71 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void setup();
-#line 64 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 81 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void loop();
-#line 74 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 92 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void builtinLED();
-#line 86 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 110 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void debugPrint(String debugString);
-#line 91 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 121 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void debugPrint(String debugString, bool newline);
-#line 99 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 137 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void logEvent(String dataToLog);
-#line 125 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 163 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void readAndDisplayTemperature();
-#line 136 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 178 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void tftDrawText(String text, uint16_t color);
-#line 148 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 198 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void automaticFan(float temperatureThreshold);
-#line 164 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 221 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void windowBlinds();
-#line 190 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 254 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+void readRFID();
+#line 290 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void temperatureSetup();
-#line 227 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 332 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void spiffWifiSetup();
-#line 274 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 384 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void motorSetup();
-#line 281 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 395 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void windowBlindSetup();
+#line 410 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+void safeSubSytem();
 #line 2 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
 void readFile(fs::FS &fs, const char * path);
 #line 18 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
@@ -98,7 +118,7 @@ void routesConfiguration();
 String getDateTime();
 #line 67 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String processor(const String& var);
-#line 55 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 71 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void setup()
 {
 
@@ -106,6 +126,7 @@ void setup()
   spiffWifiSetup();
   motorSetup();
   windowBlindSetup();
+  safeSubSytem();
 }
 
 void loop()
@@ -115,11 +136,18 @@ void loop()
   readAndDisplayTemperature();
   automaticFan(10.0);
   windowBlinds();
+  readRFID();
   logEvent("We are here!");
 }
 
 void builtinLED()
 {
+  /*
+      this is the LED it function is to turn on the LED when LEDon is True
+      and off if it is faulse.
+      @return: void
+   */
+
   if (LEDOn)
   {
     digitalWrite(LED_BUILTIN, HIGH);
@@ -132,11 +160,25 @@ void builtinLED()
 
 void debugPrint(String debugString)
 {
+  /*
+     this is debugprint it is used to print debug imfomation.
+     @return: void
+     @param debugString - String is to print debug
+  */
+
   debugPrint(debugString, true);
 }
 
 void debugPrint(String debugString, bool newline)
 {
+
+  /*
+     this is debugprint it is used to print debug imfomation.
+     @return: void
+     @param debugString - String is to print debug
+     @param newline - bool if true print new line else not
+  */
+
   Serial.print(debugString);
   if (newline)
   {
@@ -171,7 +213,11 @@ void logEvent(String dataToLog)
 
 void readAndDisplayTemperature()
 {
-  // Read and print out the temperature, then convert to *F
+
+  /*
+    Read and print out the temperature, then convert to *F
+     @return: void
+  */
   float c = tempsensor.readTempC();
   float f = c * 9.0 / 5.0 + 32;
   debugPrint("Temp: " + (String)c + "*C \t" + (String)f + "*F");
@@ -182,6 +228,14 @@ void readAndDisplayTemperature()
 
 void tftDrawText(String text, uint16_t color)
 {
+
+  /*
+    tftDrawingText if retures true then it prints the test if
+    it returns faules theb dose not print
+     @return: void
+     @param text
+     @param color
+  */
   debugPrint("Start DrawText");
   tft.fillScreen(ST77XX_BLACK);
   tft.setCursor(0, 0);
@@ -194,6 +248,13 @@ void tftDrawText(String text, uint16_t color)
 
 void automaticFan(float temperatureThreshold)
 {
+
+  /*
+    automaticFan is use to read the tempretue if it is higher then c
+    then it is forward if retuned less then c it reutns stop
+     @return: void
+     @param temperatureThreshold
+  */
   float c = tempsensor.readTempC();
   myMotor->setSpeed(100);
   if (c < temperatureThreshold)
@@ -210,6 +271,12 @@ void automaticFan(float temperatureThreshold)
 
 void windowBlinds()
 {
+
+  /*
+    when the button is pressed it  opens the blinds when pressed again it
+    closes the blinds
+     @return: void
+  */
   uint32_t buttons = ss.readButtons();
   debugPrint("blinds " + buttons);
   if (!(buttons & TFTWING_BUTTON_A))
@@ -217,13 +284,15 @@ void windowBlinds()
     debugPrint("blinds button");
     if (blindsOpen)
     {
-      debugPrint("blinds Open");
+      logEvent("Closing Blinds");
+      debugPrint("blinds Closed");
       myservo.write(0);
     }
     else
     {
       myservo.write(180);
-      debugPrint("blinds Closed");
+      debugPrint("blinds Openned");
+      logEvent("Opening Blinds");
     }
     blindsOpen = !blindsOpen;
   }
@@ -233,9 +302,49 @@ void windowBlinds()
   }
 }
 
+void readRFID()
+{
+
+  String uidOfCardRead = "";
+  String validCardUID = "00 232 81 25";
+
+  if (rfid.PICC_IsNewCardPresent())
+  { // new tag is available
+    if (rfid.PICC_ReadCardSerial())
+    { // NUID has been readed
+      MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
+      for (int i = 0; i < rfid.uid.size; i++)
+      {
+        uidOfCardRead += rfid.uid.uidByte[i] < 0x10 ? " 0" : " ";
+        uidOfCardRead += rfid.uid.uidByte[i];
+      }
+      Serial.println(uidOfCardRead);
+
+      rfid.PICC_HaltA();      // halt PICC
+      rfid.PCD_StopCrypto1(); // stop encryption on PCD
+      uidOfCardRead.trim();
+      if (uidOfCardRead == validCardUID)
+      {
+        safeLocked = false;
+        logEvent("Safe Unlocked");
+      }
+      else
+      {
+        safeLocked = true;
+        logEvent("Safe Locked");
+      }
+    }
+  }
+}
 // All Sensor Setup Code
+
 void temperatureSetup()
 {
+
+  /*
+    this is used to read the ss. and is desplayed on the screen
+     @return: void
+  */
   Serial.begin(9600);
 
   if (!ss.begin())
@@ -273,6 +382,11 @@ void temperatureSetup()
 
 void spiffWifiSetup()
 {
+
+  /*
+    this is a spiffWifiSetup
+     @return: void
+  */
   Serial.begin(9600);
   while (!Serial)
   {
@@ -320,6 +434,10 @@ void spiffWifiSetup()
 // Motor Shield Start
 void motorSetup()
 {
+  /*
+    this is the setup code for the motor Shield
+     @return: void
+  */
   AFMS.begin(); // Motor Shield Start
 }
 
@@ -327,6 +445,11 @@ void motorSetup()
 
 void windowBlindSetup()
 {
+
+  /*
+  this is used to set up the windowblinds
+     @return: void
+  */
   ESP32PWM::allocateTimer(0);
   ESP32PWM::allocateTimer(1);
   ESP32PWM::allocateTimer(2);
@@ -335,6 +458,17 @@ void windowBlindSetup()
   myservo.attach(servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
 }
 
+void safeSubSytem()
+{
+  // RFID Start
+  SPI.begin();     // init SPI bus
+  rfid.PCD_Init(); // init MFRC522
+  // RFID End
+  pinMode(LEDRed, OUTPUT);
+  pinMode(LEDGreen, OUTPUT);
+  digitalWrite(LEDRed, LOW);
+  digitalWrite(LEDGreen, LOW);
+}
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
 //SPIFFS File Functions
 void readFile(fs::FS &fs, const char * path) {

@@ -91,6 +91,11 @@
   },
   {
     "Sourcefile": "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\build\\sketch\\RMS.ino.cpp",
+    "Include": "MFRC522.h",
+    "Includepath": "C:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\Arduino\\libraries\\MFRC522\\src"
+  },
+  {
+    "Sourcefile": "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\build\\sketch\\RMS.ino.cpp",
     "Include": "",
     "Includepath": null
   },
@@ -376,6 +381,16 @@
   },
   {
     "Sourcefile": "C:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\Arduino\\libraries\\RTClib\\src\\RTClib.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\Arduino\\libraries\\MFRC522\\src\\MFRC522.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\Arduino\\libraries\\MFRC522\\src\\MFRC522Extended.cpp",
     "Include": "",
     "Includepath": null
   }
