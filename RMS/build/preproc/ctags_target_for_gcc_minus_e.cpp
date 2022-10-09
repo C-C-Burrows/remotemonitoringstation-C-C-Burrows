@@ -295,9 +295,10 @@ void readRFID()
 
   String uidOfCardRead = "";
   String validCardUID = "00 232 81 25";
-
+debugPrint("in read rfid");
   if (rfid.PICC_IsNewCardPresent())
   { // new tag is available
+  debugPrint("new tag present");
     if (rfid.PICC_ReadCardSerial())
     { // NUID has been readed
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
@@ -306,11 +307,12 @@ void readRFID()
         uidOfCardRead += rfid.uid.uidByte[i] < 0x10 ? " 0" : " ";
         uidOfCardRead += rfid.uid.uidByte[i];
       }
-      Serial.println(uidOfCardRead);
+      debugPrint(uidOfCardRead);
 
       rfid.PICC_HaltA(); // halt PICC
       rfid.PCD_StopCrypto1(); // stop encryption on PCD
       uidOfCardRead.trim();
+      debugPrint("cheecking card");
       if (uidOfCardRead == validCardUID)
       {
         safeLocked = false;
@@ -336,7 +338,7 @@ void temperatureSetup()
      @return: void
 
   */
-# 297 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 299 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   Serial.begin(9600);
 
   if (!ss.begin())
@@ -382,7 +384,7 @@ void spiffWifiSetup()
      @return: void
 
   */
-# 339 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 341 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   Serial.begin(9600);
   while (!Serial)
   {
@@ -422,7 +424,7 @@ void spiffWifiSetup()
   }
 
   // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct  9 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("12:00:30"))))));
+  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct  9 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("12:07:58"))))));
   rtc.start();
   pinMode(LED_BUILTIN, 0x03);
 }
@@ -437,7 +439,7 @@ void motorSetup()
      @return: void
 
   */
-# 390 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 392 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   AFMS.begin(); // Motor Shield Start
 }
 
@@ -453,7 +455,7 @@ void windowBlindSetup()
      @return: void
 
   */
-# 402 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 404 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   ESP32PWM::allocateTimer(0);
   ESP32PWM::allocateTimer(1);
   ESP32PWM::allocateTimer(2);

@@ -256,9 +256,10 @@ void readRFID()
 
   String uidOfCardRead = "";
   String validCardUID = "00 232 81 25";
-
+debugPrint("in read rfid");
   if (rfid.PICC_IsNewCardPresent())
   { // new tag is available
+  debugPrint("new tag present");
     if (rfid.PICC_ReadCardSerial())
     { // NUID has been readed
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
@@ -267,11 +268,12 @@ void readRFID()
         uidOfCardRead += rfid.uid.uidByte[i] < 0x10 ? " 0" : " ";
         uidOfCardRead += rfid.uid.uidByte[i];
       }
-      Serial.println(uidOfCardRead);
+      debugPrint(uidOfCardRead);
 
       rfid.PICC_HaltA();      // halt PICC
       rfid.PCD_StopCrypto1(); // stop encryption on PCD
       uidOfCardRead.trim();
+      debugPrint("cheecking card");
       if (uidOfCardRead == validCardUID)
       {
         safeLocked = false;

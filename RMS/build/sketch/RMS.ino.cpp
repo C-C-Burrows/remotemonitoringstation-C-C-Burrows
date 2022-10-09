@@ -92,15 +92,15 @@ void automaticFan(float temperatureThreshold);
 void windowBlinds();
 #line 254 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void readRFID();
-#line 290 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 292 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void temperatureSetup();
-#line 332 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 334 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void spiffWifiSetup();
-#line 384 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 386 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void motorSetup();
-#line 395 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 397 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void windowBlindSetup();
-#line 410 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 412 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void safeSubSytem();
 #line 2 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
 void readFile(fs::FS &fs, const char * path);
@@ -307,9 +307,10 @@ void readRFID()
 
   String uidOfCardRead = "";
   String validCardUID = "00 232 81 25";
-
+debugPrint("in read rfid");
   if (rfid.PICC_IsNewCardPresent())
   { // new tag is available
+  debugPrint("new tag present");
     if (rfid.PICC_ReadCardSerial())
     { // NUID has been readed
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
@@ -318,11 +319,12 @@ void readRFID()
         uidOfCardRead += rfid.uid.uidByte[i] < 0x10 ? " 0" : " ";
         uidOfCardRead += rfid.uid.uidByte[i];
       }
-      Serial.println(uidOfCardRead);
+      debugPrint(uidOfCardRead);
 
       rfid.PICC_HaltA();      // halt PICC
       rfid.PCD_StopCrypto1(); // stop encryption on PCD
       uidOfCardRead.trim();
+      debugPrint("cheecking card");
       if (uidOfCardRead == validCardUID)
       {
         safeLocked = false;
