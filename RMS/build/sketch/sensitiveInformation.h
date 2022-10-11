@@ -10,8 +10,8 @@
  */
 
 const char* host            = "RMS";
-const char* ssid            = "Charlotte's iphone" //"RoboRange";       //"TheClan-Home";    // Wifi Network Name
-const char* password        = "BurrowsClan2020"   //"Password01";       //"BurrowsClanHome3"; // Wifi Password
+const char* ssid            = "Charlotte's iphone"; //"RoboRange";       //"TheClan-Home";    // Wifi Network Name
+const char* password        = "BurrowsClan2020";   //"Password01";       //"BurrowsClanHome3"; // Wifi Password
 
 
 const char* http_username   = "admin";
