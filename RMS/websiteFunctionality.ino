@@ -81,3 +81,10 @@ String processor(const String& var) {
   // Default "catch" which will return nothing in case the HTML has no variable to replace.
   return String();
 }
+
+void configRouter() {
+  // this is used to configure the router
+  server.onNotFound([](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/404.html");
+  });
+}

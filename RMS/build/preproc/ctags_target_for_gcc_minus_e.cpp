@@ -424,7 +424,7 @@ void spiffWifiSetup()
   }
 
   // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct  9 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("12:07:58"))))));
+  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct 11 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("11:24:09"))))));
   rtc.start();
   pinMode(LED_BUILTIN, 0x03);
 }
@@ -634,4 +634,11 @@ String processor(const String& var) {
 
   // Default "catch" which will return nothing in case the HTML has no variable to replace.
   return String();
+}
+
+void configRouter() {
+  // this is used to configure the router
+  server.onNotFound([](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/404.html");
+  });
 }
