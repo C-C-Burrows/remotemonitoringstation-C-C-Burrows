@@ -114,9 +114,9 @@ void renameFile(fs::FS &fs, const char * path1, const char * path2);
 void deleteFile(fs::FS &fs, const char * path);
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 void routesConfiguration();
-#line 60 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 63 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String getDateTime();
-#line 67 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 70 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String processor(const String& var);
 #line 71 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void setup()
@@ -545,6 +545,9 @@ void deleteFile(fs::FS &fs, const char * path) {
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 void routesConfiguration() {
 
+server.onNotFound([](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/404.html");
+  });
   // Example of a 'standard' route
   // No Authentication
   server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest * request) {
@@ -624,5 +627,9 @@ String processor(const String& var) {
   }
 
   // Default "catch" which will return nothing in case the HTML has no variable to replace.
-  return String();
+
+  if (var == "TEMPERATURE") {
+  return String(tempsensor.readTempC());
 }
+}
+

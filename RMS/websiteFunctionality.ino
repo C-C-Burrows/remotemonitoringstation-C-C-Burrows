@@ -1,5 +1,8 @@
 void routesConfiguration() {
 
+server.onNotFound([](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/404.html");
+  });
   // Example of a 'standard' route
   // No Authentication
   server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest * request) {
@@ -79,5 +82,8 @@ String processor(const String& var) {
   }
 
   // Default "catch" which will return nothing in case the HTML has no variable to replace.
-  return String();
+
+  if (var == "TEMPERATURE") {
+  return String(tempsensor.readTempC());
+}
 }

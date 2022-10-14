@@ -424,7 +424,7 @@ void spiffWifiSetup()
   }
 
   // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct 12 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("16:54:48"))))));
+  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct 15 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("10:56:17"))))));
   rtc.start();
   pinMode(LED_BUILTIN, 0x03);
 }
@@ -548,6 +548,9 @@ void deleteFile(fs::FS &fs, const char * path) {
 # 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 void routesConfiguration() {
 
+server.onNotFound([](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/404.html");
+  });
   // Example of a 'standard' route
   // No Authentication
   server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest * request) {
@@ -626,12 +629,15 @@ String processor(const String& var) {
       if (var=="VARIABLEVALUE") { return "5";}
 
   */
-# 76 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+# 79 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
   if (var == "DATETIME") {
     String datetime = getDateTime();
     return datetime;
   }
 
   // Default "catch" which will return nothing in case the HTML has no variable to replace.
-  return String();
+
+  if (var == "TEMPERATURE") {
+  return String(tempsensor.readTempC());
+}
 }
