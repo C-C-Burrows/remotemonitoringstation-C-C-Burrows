@@ -1,22 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <link rel="stylesheet" href="arduino.css">
     <meta charset="UTF-8">
-    <title>Admin</title>
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="arduino.css">
 </head>
+
 <body>
-<nav>
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        <li class="active"><a href="/dashboard.html">Dashboard</a></li>
-        <li><a href="/admin">Admin</a></li>
-    </ul>
-</nav>
-<h1>Admin Page</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li class="active"><a href="/dashboard.html">Dashboard</a></li>
+            <li><a href="/admin">Admin</a></li>
+        </ul>
+    </nav>
 
+    <h1>Admin Dashboard</h1>
 
+    
+    <div class="grid-container">
+        <div class="banner guest">Guest Controls</div>
+        <div>
+            <p>Date and Time </p>
+            <p>%DATETIME% *</p>
+        </div>
+        <div>
+            <p>Temperatrure Value</p>
+            <p>%TEMPERATURE% *</p>
+        </div>
+        <div>
+            <div>
+                <H3>Safe Control</h3>
+                <p>%SAFESTATUS%</a></p>
+
+                <p><a href="/SafeLock">Lock Safe</a></p>
+                <p><a href="/SafeUnlock">Unlock Safe</a></p>
+            </div>
+        </div>
+        <div>
+            LogEvents<P><a href="/logOutput">Download</a>
+        </div>
+        <div>
+            <H3>Light Control</h3>
+            <p><a href="/LEDOn">Turn LED On</a></p>
+            <p><a href="/LEDOff">Turn LED Off</a></p>
+        </div>
+        <div>
+            <H3>Fan Control</h3>
+            <p>%FANCONTROL%</p>
+            <p><a href="/FanManualOn">Turn Fan On</a></p>
+            <p><a href="/FanManualOff">Turn Fan Off</a></p>
+            <p><a href="/FanControl">Fan Automatic/Manual</a></p>
+        </div>
+    </div>
 </body>
-</HTML>
 
-
+</html>

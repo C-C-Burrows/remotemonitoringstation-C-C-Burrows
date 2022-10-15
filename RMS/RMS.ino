@@ -31,6 +31,9 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 #include <Adafruit_MotorShield.h>
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *myMotor = AFMS.getMotor(3);
+
+bool fanEnabled = false;            // If the fan is on or off.
+bool automaticFanControl = true;    // Automatic or manual control
 // Motor Shield END
 
 // ESP32Servo Start
@@ -83,7 +86,7 @@ void loop()
   builtinLED();
   delay(LOOPDELAY); // To allow time to publish new code.
   readAndDisplayTemperature();
-  automaticFan(10.0);
+  fanControl();
   windowBlinds();
   readRFID();
   logEvent("We are here!");
@@ -208,13 +211,41 @@ void automaticFan(float temperatureThreshold)
   myMotor->setSpeed(100);
   if (c < temperatureThreshold)
   {
+    fanEnabled = false;
+  }else{
+    fanEnabled = true;
+    /*
     myMotor->run(RELEASE);
     debugPrint("stop");
+  //}else{
+    myMotor->run(FORWARD);
+    debugPrint("forward");
+  */
+ }
+  
+  
+}
+void fanControl() {
+  if (automaticFanControl) {
+    debugPrint("this is a auto fan");
+    automaticFan(25.0);
   }
   else
   {
+    debugPrint("check to change from auto to non auot");
+    manualFan();
+  }
+}
+
+void manualFan(){
+   if (fanEnabled) {
+    debugPrint("run forawrd");
     myMotor->run(FORWARD);
-    debugPrint("forward");
+  } 
+  else 
+  {
+    debugPrint("run release");
+    myMotor->run(RELEASE);
   }
 }
 
