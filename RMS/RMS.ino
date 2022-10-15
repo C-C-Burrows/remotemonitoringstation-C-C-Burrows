@@ -32,8 +32,8 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *myMotor = AFMS.getMotor(3);
 
-bool fanEnabled = false;            // If the fan is on or off.
-bool automaticFanControl = true;    // Automatic or manual control
+bool fanEnabled = false;         // If the fan is on or off.
+bool automaticFanControl = true; // Automatic or manual control
 // Motor Shield END
 
 // ESP32Servo Start
@@ -74,6 +74,11 @@ boolean LEDOn = false; // State of Built-in LED true=on, false=off.
 void setup()
 {
 
+  /*
+     This is the main setup to configure all of the components of the arduino board.
+      @return: void
+
+   */
   temperatureSetup();
   spiffWifiSetup();
   motorSetup();
@@ -83,6 +88,11 @@ void setup()
 
 void loop()
 {
+  /*
+    this is the main loop of the program which is always running.
+    @return: void
+ */
+
   builtinLED();
   delay(LOOPDELAY); // To allow time to publish new code.
   readAndDisplayTemperature();
@@ -103,10 +113,12 @@ void builtinLED()
   if (LEDOn)
   {
     digitalWrite(LED_BUILTIN, HIGH);
+    logEvent("LED On");
   }
   else
   {
     digitalWrite(LED_BUILTIN, LOW);
+    logEvent("LED Off");
   }
 }
 
@@ -143,7 +155,7 @@ void logEvent(String dataToLog)
      Log entries to a file stored in SPIFFS partition on the ESP32.
   */
   // Get the updated/current time
-   DateTime rightNow = rtc.now();
+  DateTime rightNow = rtc.now();
   char csvReadableDate[25];
   sprintf(csvReadableDate, "%02d,%02d,%02d,%02d,%02d,%02d,", rightNow.year(), rightNow.month(), rightNow.day(), rightNow.hour(), rightNow.minute(), rightNow.second());
 
@@ -155,7 +167,7 @@ void logEvent(String dataToLog)
   appendFile(SPIFFS, "/logEvents.csv", logEntry);
 
   // Output the logEvents - FOR DEBUG ONLY. Comment out to avoid spamming the serial monitor.
-  //  readFile(SPIFFS, "/logEvents.csv"); 
+  //  readFile(SPIFFS, "/logEvents.csv");
 
   Serial.print("\nEvent Logged: ");
   Serial.println(logEntry);
@@ -176,6 +188,7 @@ void readAndDisplayTemperature()
   String tempInC = String(c);
   tftDrawText(tempInC, ST77XX_WHITE);
   delay(100);
+  logEvent("Read and Display Temperature");
 }
 
 void tftDrawText(String text, uint16_t color)
@@ -211,22 +224,28 @@ void automaticFan(float temperatureThreshold)
   myMotor->setSpeed(100);
   if (c < temperatureThreshold)
   {
-    fanEnabled = false;
-  }else{
-    fanEnabled = true;
-    /*
     myMotor->run(RELEASE);
     debugPrint("stop");
-  //}else{
+    logEvent("Automatic Mode On.  Fan Stopping");
+    fanEnabled = false;
+  }
+  else
+  {
+    fanEnabled = true;
     myMotor->run(FORWARD);
     debugPrint("forward");
-  */
- }
-  
-  
+    logEvent("Automatic Mode On.  Fan Running");
+  }
 }
-void fanControl() {
-  if (automaticFanControl) {
+void fanControl()
+{
+  /*
+    function to control the fan in either automatic model or manual mode
+     @return: void
+      */
+
+  if (automaticFanControl)
+  {
     debugPrint("this is a auto fan");
     automaticFan(25.0);
   }
@@ -237,15 +256,25 @@ void fanControl() {
   }
 }
 
-void manualFan(){
-   if (fanEnabled) {
+void manualFan()
+{
+  /*
+    manualMode Fan control if the fan is enabled it will turn it on
+    if it is disabled it will turn it off.
+    @return: void
+      */
+
+  if (fanEnabled)
+  {
     debugPrint("run forawrd");
     myMotor->run(FORWARD);
-  } 
-  else 
+    logEvent("Manual Fan Mode.  Fan Starting");
+  }
+  else
   {
     debugPrint("run release");
     myMotor->run(RELEASE);
+    logEvent("Manual Fan Mode.  Fan Stopping");
   }
 }
 
@@ -287,10 +316,10 @@ void readRFID()
 
   String uidOfCardRead = "";
   String validCardUID = "00 232 81 25";
-debugPrint("in read rfid");
+  debugPrint("in read rfid");
   if (rfid.PICC_IsNewCardPresent())
   { // new tag is available
-  debugPrint("new tag present");
+    debugPrint("new tag present");
     if (rfid.PICC_ReadCardSerial())
     { // NUID has been readed
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
@@ -440,21 +469,26 @@ void windowBlindSetup()
   myservo.attach(servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
 }
 
-void safeSubSytem(){
-  if (safeLocked){
-  // RFID Start
-  SPI.begin();     // init SPI bus
-  rfid.PCD_Init(); // init MFRC522
-  // RFID End
+void safeSubSytem()
+{
+  /*
+    Control for the safe system.  This function controls if the safe is open or closed
+     @return: void
+      */
+  if (safeLocked)
+  {
+    // RFID Start
+    SPI.begin();     // init SPI bus
+    rfid.PCD_Init(); // init MFRC522
+    // RFID End
 
-  digitalWrite(LEDRed, OUTPUT);
-  digitalWrite(LEDGreen, OUTPUT);
-}else{
-  digitalWrite(LEDRed, LOW);
-  digitalWrite(LEDGreen, LOW);
-}
+    digitalWrite(LEDRed, OUTPUT);
+    digitalWrite(LEDGreen, OUTPUT);
+  }
+  else
+  {
+    digitalWrite(LEDRed, LOW);
+    digitalWrite(LEDGreen, LOW);
+  }
 }
 
-void safeStatusDisplay(){
-
-}

@@ -462,7 +462,7 @@ void spiffWifiSetup()
   }
 
   // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct 15 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("14:43:25"))))));
+  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct 15 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("15:00:18"))))));
   rtc.start();
   pinMode(LED_BUILTIN, 0x03);
 }
