@@ -102,6 +102,8 @@ void motorSetup();
 void windowBlindSetup();
 #line 412 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void safeSubSytem();
+#line 427 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+void safeStatusDisplay();
 #line 2 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
 void readFile(fs::FS &fs, const char * path);
 #line 18 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
@@ -114,9 +116,9 @@ void renameFile(fs::FS &fs, const char * path1, const char * path2);
 void deleteFile(fs::FS &fs, const char * path);
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 void routesConfiguration();
-#line 63 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 94 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String getDateTime();
-#line 70 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 101 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String processor(const String& var);
 #line 71 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void setup()
@@ -191,7 +193,7 @@ void logEvent(String dataToLog)
      Log entries to a file stored in SPIFFS partition on the ESP32.
   */
   // Get the updated/current time
-  DateTime rightNow = rtc.now();
+   DateTime rightNow = rtc.now();
   char csvReadableDate[25];
   sprintf(csvReadableDate, "%02d,%02d,%02d,%02d,%02d,%02d,", rightNow.year(), rightNow.month(), rightNow.day(), rightNow.hour(), rightNow.minute(), rightNow.second());
 
@@ -203,7 +205,7 @@ void logEvent(String dataToLog)
   appendFile(SPIFFS, "/logEvents.csv", logEntry);
 
   // Output the logEvents - FOR DEBUG ONLY. Comment out to avoid spamming the serial monitor.
-  //  readFile(SPIFFS, "/logEvents.csv");
+  //  readFile(SPIFFS, "/logEvents.csv"); 
 
   Serial.print("\nEvent Logged: ");
   Serial.println(logEntry);
@@ -260,12 +262,12 @@ void automaticFan(float temperatureThreshold)
   if (c < temperatureThreshold)
   {
     myMotor->run(RELEASE);
-    Serial.println("stop");
+    debugPrint("stop");
   }
   else
   {
     myMotor->run(FORWARD);
-    Serial.println("forward");
+    debugPrint("forward");
   }
 }
 
@@ -460,16 +462,23 @@ void windowBlindSetup()
   myservo.attach(servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
 }
 
-void safeSubSytem()
-{
+void safeSubSytem(){
+  if (safeLocked){
   // RFID Start
   SPI.begin();     // init SPI bus
   rfid.PCD_Init(); // init MFRC522
   // RFID End
-  pinMode(LEDRed, OUTPUT);
-  pinMode(LEDGreen, OUTPUT);
+
+  digitalWrite(LEDRed, OUTPUT);
+  digitalWrite(LEDGreen, OUTPUT);
+}else{
   digitalWrite(LEDRed, LOW);
   digitalWrite(LEDGreen, LOW);
+}
+}
+
+void safeStatusDisplay(){
+
 }
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
 //SPIFFS File Functions
@@ -545,9 +554,10 @@ void deleteFile(fs::FS &fs, const char * path) {
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 void routesConfiguration() {
 
-server.onNotFound([](AsyncWebServerRequest * request) {
-    request->send(SPIFFS, "/404.html");
+  server.onNotFound([](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/404.html","text/html");
   });
+  
   // Example of a 'standard' route
   // No Authentication
   server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest * request) {
@@ -567,17 +577,31 @@ server.onNotFound([](AsyncWebServerRequest * request) {
     request->send(SPIFFS, "/arduino.css", "text/css");
   });
 
+ // Example of linking to an external file
+  server.on("/welcomepage.png", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/welcomepage.png", "image/png");
+  });
 
   // Example of a route with additional authentication (popup in browser)
   // And uses the processor function.
   server.on("/dashboard.html", HTTP_GET, [](AsyncWebServerRequest * request) {
     if (!request->authenticate(http_username, http_password))
       return request->requestAuthentication();
+    debugPrint("In Dashbord Click");
     logEvent("Dashboard");
     request->send(SPIFFS, "/dashboard.html", "text/html", false, processor);
   });
 
-
+// Example of a route with additional authentication (popup in browser)
+  // And uses the processor function.
+  server.on("/admin", HTTP_GET, [](AsyncWebServerRequest * request) {
+    if (!request->authenticate(http_username, http_password))
+      return request->requestAuthentication();
+    
+    logEvent("Admin");
+    request->send(SPIFFS, "/admin.html", "text/html", false, processor);
+  });
+  
   // Example of route with authentication, and use of processor
   // Also demonstrates how to have arduino functionality included (turn LED on)
   server.on("/LEDOn", HTTP_GET, [](AsyncWebServerRequest * request) {
@@ -603,6 +627,22 @@ server.onNotFound([](AsyncWebServerRequest * request) {
     logEvent("Log Event Download");
     request->send(SPIFFS, "/logEvents.csv", "text/html", true);
   });
+  
+  server.on("/SafeLock",  HTTP_GET, [](AsyncWebServerRequest * request) {
+  if (!request->authenticate(http_username, http_password))
+    return request->requestAuthentication();
+    safeLocked = true;
+  logEvent("Safe Locked via Website");
+  request->send(SPIFFS, "/dashboard.html", "text/html", false, processor);
+});
+
+server.on("/SafeUnlock",  HTTP_GET, [](AsyncWebServerRequest * request) {
+  if (!request->authenticate(http_username, http_password))
+    return request->requestAuthentication();
+    safeLocked = false;
+  logEvent("Safe Unlocked via Website");
+  request->send(SPIFFS, "/dashboard.html", "text/html", false, processor);
+});
 }
 
 String getDateTime() {
@@ -627,9 +667,9 @@ String processor(const String& var) {
   }
 
   // Default "catch" which will return nothing in case the HTML has no variable to replace.
-
   if (var == "TEMPERATURE") {
-  return String(tempsensor.readTempC());
-}
+    return String(tempsensor.readTempC());
+  }
+
 }
 

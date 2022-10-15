@@ -140,7 +140,7 @@ void logEvent(String dataToLog)
      Log entries to a file stored in SPIFFS partition on the ESP32.
   */
   // Get the updated/current time
-  DateTime rightNow = rtc.now();
+   DateTime rightNow = rtc.now();
   char csvReadableDate[25];
   sprintf(csvReadableDate, "%02d,%02d,%02d,%02d,%02d,%02d,", rightNow.year(), rightNow.month(), rightNow.day(), rightNow.hour(), rightNow.minute(), rightNow.second());
 
@@ -152,7 +152,7 @@ void logEvent(String dataToLog)
   appendFile(SPIFFS, "/logEvents.csv", logEntry);
 
   // Output the logEvents - FOR DEBUG ONLY. Comment out to avoid spamming the serial monitor.
-  //  readFile(SPIFFS, "/logEvents.csv");
+  //  readFile(SPIFFS, "/logEvents.csv"); 
 
   Serial.print("\nEvent Logged: ");
   Serial.println(logEntry);
@@ -209,12 +209,12 @@ void automaticFan(float temperatureThreshold)
   if (c < temperatureThreshold)
   {
     myMotor->run(RELEASE);
-    Serial.println("stop");
+    debugPrint("stop");
   }
   else
   {
     myMotor->run(FORWARD);
-    Serial.println("forward");
+    debugPrint("forward");
   }
 }
 
@@ -409,14 +409,21 @@ void windowBlindSetup()
   myservo.attach(servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
 }
 
-void safeSubSytem()
-{
+void safeSubSytem(){
+  if (safeLocked){
   // RFID Start
   SPI.begin();     // init SPI bus
   rfid.PCD_Init(); // init MFRC522
   // RFID End
-  pinMode(LEDRed, OUTPUT);
-  pinMode(LEDGreen, OUTPUT);
+
+  digitalWrite(LEDRed, OUTPUT);
+  digitalWrite(LEDGreen, OUTPUT);
+}else{
   digitalWrite(LEDRed, LOW);
   digitalWrite(LEDGreen, LOW);
+}
+}
+
+void safeStatusDisplay(){
+
 }
