@@ -86,13 +86,13 @@ void routesConfiguration()
   logEvent("Safe Unlocked via Website");
   request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
 
-  server.on("/FanControl",  HTTP_GET, [](AsyncWebServerRequest * request) {
+  server.on("/FanControl", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
   if (!request->authenticate(http_username, http_password))
     return request->requestAuthentication();
   automaticFanControl = !automaticFanControl;
   logEvent("Fan Manual Control: On");
-  request->send(SPIFFS, "/dashboard.html", "text/html", false, processor);
-});
+  request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
 
   server.on("/FanManualOn", HTTP_GET, [](AsyncWebServerRequest *request)
             {
@@ -137,29 +137,34 @@ String processor(const String &var)
 
   // Default "catch" which will return nothing in case the HTML has no variable to replace.
   if (var == "TEMPERATURE")
-  { 
-  float currentTemp = tempsensor.readTempC();
-  int currentTempWholeNubmber = currentTemp ;
-  String currentTempString = String(currentTempWholeNubmber) + "°C.";
-  return String(currentTempString); //currentTempString;
-  }
-
- if (var == "SAFESTATUS"){
-  if (safeLocked){
-    return "Safe LOCKED";
-  }
-  else
   {
-    return "Sade UNLOCKED";
+    float currentTemp = tempsensor.readTempC();
+    int currentTempWholeNubmber = currentTemp;
+    String currentTempString = String(currentTempWholeNubmber) + "°C.";
+    return String(currentTempString); // currentTempString;
   }
- }
 
-
-  if (var == "FANCONTROL") {
-  if (automaticFanControl) {
-    return "Automatic";
-  } else {
-    return "Manual";
+  if (var == "SAFESTATUS")
+  {
+    if (safeLocked)
+    {
+      return "Safe LOCKED";
+    }
+    else
+    {
+      return "Sade UNLOCKED";
+    }
   }
-}
+
+  if (var == "FANCONTROL")
+  {
+    if (automaticFanControl)
+    {
+      return "Automatic";
+    }
+    else
+    {
+      return "Manual";
+    }
+  }
 }

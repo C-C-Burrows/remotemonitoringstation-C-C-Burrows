@@ -73,7 +73,6 @@ boolean LEDOn = false; // State of Built-in LED true=on, false=off.
 
 void setup()
 {
-
   /*
      This is the main setup to configure all of the components of the arduino board.
       @return: void

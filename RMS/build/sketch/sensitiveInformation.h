@@ -16,3 +16,6 @@ const char* password        = "BurrowsClanHome3";   //"Password01";        // Wi
 
 const char* http_username   = "admin";
 const char* http_password   = "admin";
+
+const char* http_username2   = "Guest";
+const char* http_password2   = "Guest";

@@ -74,7 +74,16 @@ boolean LEDOn = false; // State of Built-in LED true=on, false=off.
 
 void setup()
 {
+  /*
 
+     This is the main setup to configure all of the components of the arduino board.
+
+      @return: void
+
+
+
+   */
+# 81 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   temperatureSetup();
   spiffWifiSetup();
   motorSetup();
@@ -84,6 +93,14 @@ void setup()
 
 void loop()
 {
+  /*
+
+    this is the main loop of the program which is always running.
+
+    @return: void
+
+ */
+# 95 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   builtinLED();
   delay(100); // To allow time to publish new code.
   readAndDisplayTemperature();
@@ -104,14 +121,16 @@ void builtinLED()
       @return: void
 
    */
-# 103 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 112 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   if (LEDOn)
   {
     digitalWrite(LED_BUILTIN, 0x1);
+    logEvent("LED On");
   }
   else
   {
     digitalWrite(LED_BUILTIN, 0x0);
+    logEvent("LED Off");
   }
 }
 
@@ -126,7 +145,7 @@ void debugPrint(String debugString)
      @param debugString - String is to print debug
 
   */
-# 121 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 132 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   debugPrint(debugString, true);
 }
 
@@ -144,7 +163,7 @@ void debugPrint(String debugString, bool newline)
      @param newline - bool if true print new line else not
 
   */
-# 134 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 145 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   Serial.print(debugString);
   if (newline)
   {
@@ -158,9 +177,9 @@ void logEvent(String dataToLog)
      Log entries to a file stored in SPIFFS partition on the ESP32.
 
   */
-# 145 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 156 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   // Get the updated/current time
-   DateTime rightNow = rtc.now();
+  DateTime rightNow = rtc.now();
   char csvReadableDate[25];
   sprintf(csvReadableDate, "%02d,%02d,%02d,%02d,%02d,%02d,", rightNow.year(), rightNow.month(), rightNow.day(), rightNow.hour(), rightNow.minute(), rightNow.second());
 
@@ -172,7 +191,7 @@ void logEvent(String dataToLog)
   appendFile(SPIFFS, "/logEvents.csv", logEntry);
 
   // Output the logEvents - FOR DEBUG ONLY. Comment out to avoid spamming the serial monitor.
-  //  readFile(SPIFFS, "/logEvents.csv"); 
+  //  readFile(SPIFFS, "/logEvents.csv");
 
   Serial.print("\nEvent Logged: ");
   Serial.println(logEntry);
@@ -190,13 +209,14 @@ void readAndDisplayTemperature()
      @return: void
 
   */
-# 173 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 184 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   float c = tempsensor.readTempC();
   float f = c * 9.0 / 5.0 + 32;
   debugPrint("Temp: " + (String)c + "*C \t" + (String)f + "*F");
   String tempInC = String(c);
   tftDrawText(tempInC, 0xFFFF);
   delay(100);
+  logEvent("Read and Display Temperature");
 }
 
 void tftDrawText(String text, uint16_t color)
@@ -215,7 +235,7 @@ void tftDrawText(String text, uint16_t color)
      @param color
 
   */
-# 191 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 203 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   debugPrint("Start DrawText");
   tft.fillScreen(0x0000);
   tft.setCursor(0, 0);
@@ -240,34 +260,36 @@ void automaticFan(float temperatureThreshold)
      @param temperatureThreshold
 
   */
-# 210 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 222 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   float c = tempsensor.readTempC();
   myMotor->setSpeed(100);
   if (c < temperatureThreshold)
   {
-    fanEnabled = false;
-  }else{
-    fanEnabled = true;
-    /*
-
-    myMotor->run(RELEASE);
-
+    myMotor->run(4);
     debugPrint("stop");
-
-  //}else{
-
-    myMotor->run(FORWARD);
-
+    logEvent("Automatic Mode On.  Fan Stopping");
+    fanEnabled = false;
+  }
+  else
+  {
+    fanEnabled = true;
+    myMotor->run(1);
     debugPrint("forward");
-
-  */
-# 224 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
- }
-
-
+    logEvent("Automatic Mode On.  Fan Running");
+  }
 }
-void fanControl() {
-  if (automaticFanControl) {
+void fanControl()
+{
+  /*
+
+    function to control the fan in either automatic model or manual mode
+
+     @return: void
+
+      */
+# 246 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+  if (automaticFanControl)
+  {
     debugPrint("this is a auto fan");
     automaticFan(25.0);
   }
@@ -278,15 +300,29 @@ void fanControl() {
   }
 }
 
-void manualFan(){
-   if (fanEnabled) {
+void manualFan()
+{
+  /*
+
+    manualMode Fan control if the fan is enabled it will turn it on
+
+    if it is disabled it will turn it off.
+
+    @return: void
+
+      */
+# 266 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+  if (fanEnabled)
+  {
     debugPrint("run forawrd");
     myMotor->run(1);
+    logEvent("Manual Fan Mode.  Fan Starting");
   }
   else
   {
     debugPrint("run release");
     myMotor->run(4);
+    logEvent("Manual Fan Mode.  Fan Stopping");
   }
 }
 
@@ -302,7 +338,7 @@ void windowBlinds()
      @return: void
 
   */
-# 260 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 288 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   uint32_t buttons = ss.readButtons();
   debugPrint("blinds " + buttons);
   if (!(buttons & (1UL << 10)))
@@ -333,10 +369,10 @@ void readRFID()
 
   String uidOfCardRead = "";
   String validCardUID = "00 232 81 25";
-debugPrint("in read rfid");
+  debugPrint("in read rfid");
   if (rfid.PICC_IsNewCardPresent())
   { // new tag is available
-  debugPrint("new tag present");
+    debugPrint("new tag present");
     if (rfid.PICC_ReadCardSerial())
     { // NUID has been readed
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
@@ -376,7 +412,7 @@ void temperatureSetup()
      @return: void
 
   */
-# 330 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 358 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   Serial.begin(9600);
 
   if (!ss.begin())
@@ -422,7 +458,7 @@ void spiffWifiSetup()
      @return: void
 
   */
-# 372 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 400 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   Serial.begin(9600);
   while (!Serial)
   {
@@ -462,7 +498,7 @@ void spiffWifiSetup()
   }
 
   // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Oct 15 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("15:00:18"))))));
+  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Nov  6 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("09:53:20"))))));
   rtc.start();
   pinMode(LED_BUILTIN, 0x03);
 }
@@ -477,7 +513,7 @@ void motorSetup()
      @return: void
 
   */
-# 423 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 451 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   AFMS.begin(); // Motor Shield Start
 }
 
@@ -493,7 +529,7 @@ void windowBlindSetup()
      @return: void
 
   */
-# 435 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+# 463 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
   ESP32PWM::allocateTimer(0);
   ESP32PWM::allocateTimer(1);
   ESP32PWM::allocateTimer(2);
@@ -502,23 +538,31 @@ void windowBlindSetup()
   myservo.attach(servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
 }
 
-void safeSubSytem(){
-  if (safeLocked){
-  // RFID Start
-  SPI.begin(); // init SPI bus
-  rfid.PCD_Init(); // init MFRC522
-  // RFID End
+void safeSubSytem()
+{
+  /*
 
-  digitalWrite(27, 0x03);
-  digitalWrite(33, 0x03);
-}else{
-  digitalWrite(27, 0x0);
-  digitalWrite(33, 0x0);
-}
-}
+    Control for the safe system.  This function controls if the safe is open or closed
 
-void safeStatusDisplay(){
+     @return: void
 
+      */
+# 477 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+  if (safeLocked)
+  {
+    // RFID Start
+    SPI.begin(); // init SPI bus
+    rfid.PCD_Init(); // init MFRC522
+    // RFID End
+
+    digitalWrite(27, 0x03);
+    digitalWrite(33, 0x03);
+  }
+  else
+  {
+    digitalWrite(27, 0x0);
+    digitalWrite(33, 0x0);
+  }
 }
 # 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
 //SPIFFS File Functions
@@ -679,13 +723,13 @@ void routesConfiguration()
   logEvent("Safe Unlocked via Website");
   request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
 
-  server.on("/FanControl", HTTP_GET, [](AsyncWebServerRequest * request) {
+  server.on("/FanControl", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
   if (!request->authenticate(http_username, http_password))
     return request->requestAuthentication();
   automaticFanControl = !automaticFanControl;
   logEvent("Fan Manual Control: On");
-  request->send(SPIFFS, "/dashboard.html", "text/html", false, processor);
-});
+  request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
 
   server.on("/FanManualOn", HTTP_GET, [](AsyncWebServerRequest *request)
             {
@@ -737,28 +781,33 @@ String processor(const String &var)
   // Default "catch" which will return nothing in case the HTML has no variable to replace.
   if (var == "TEMPERATURE")
   {
-  float currentTemp = tempsensor.readTempC();
-  int currentTempWholeNubmber = currentTemp ;
-  String currentTempString = String(currentTempWholeNubmber) + "°C.";
-  return String(currentTempString); //currentTempString;
+    float currentTemp = tempsensor.readTempC();
+    int currentTempWholeNubmber = currentTemp;
+    String currentTempString = String(currentTempWholeNubmber) + "°C.";
+    return String(currentTempString); // currentTempString;
   }
 
- if (var == "SAFESTATUS"){
-  if (safeLocked){
-    return "Safe LOCKED";
-  }
-  else
+  if (var == "SAFESTATUS")
   {
-    return "Sade UNLOCKED";
+    if (safeLocked)
+    {
+      return "Safe LOCKED";
+    }
+    else
+    {
+      return "Sade UNLOCKED";
+    }
   }
- }
 
-
-  if (var == "FANCONTROL") {
-  if (automaticFanControl) {
-    return "Automatic";
-  } else {
-    return "Manual";
+  if (var == "FANCONTROL")
+  {
+    if (automaticFanControl)
+    {
+      return "Automatic";
+    }
+    else
+    {
+      return "Manual";
+    }
   }
-}
 }

@@ -2,19 +2,19 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 10px;
-    background-color: #40b973;
+    background-color: #c4ebf9;
     padding: 10px;
 }
 
 .grid-container > div {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(151, 217, 241, 0.872);
     text-align: center;
     padding: 20px 0;
     font-size: 20px;
 }
 
 .tinyText {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .banner {
@@ -23,13 +23,13 @@
 }
 
 body {
-    background-color: lightcyan;
+    background-color: rgb(48, 162, 211);
     /*color: blue;*/
 }
 
 h1 {
-    background-color: green;
-    color: white;
+    background-color: rgb(47, 77, 169);
+    color: rgb(44, 155, 151);
     text-align: center;
 }
 
@@ -40,7 +40,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: rgb(17, 172, 166);
 }
 
 li {
@@ -49,7 +49,7 @@ li {
 
 li a {
     display: block;
-    color: white;
+    color: rgb(141, 176, 209);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -57,9 +57,9 @@ li a {
 
 /* Change the link color to #111 (black) on hover */
 li a:hover {
-    background-color: #111;
+    background-color: rgb(141, 209, 235);
 }
 
 .active {
-    background-color: #04AA6D;
+    background-color: #7db9e7;
 }
