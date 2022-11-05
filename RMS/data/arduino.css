@@ -29,7 +29,7 @@ body {
 
 h1 {
     background-color: rgb(47, 77, 169);
-    color: rgb(44, 155, 151);
+    color: rgb(187, 236, 235);
     text-align: center;
 }
 
@@ -40,7 +40,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: rgb(17, 172, 166);
+    background-color: rgb(22, 84, 139);
 }
 
 li {
@@ -57,7 +57,7 @@ li a {
 
 /* Change the link color to #111 (black) on hover */
 li a:hover {
-    background-color: rgb(141, 209, 235);
+    background-color: rgb(19, 79, 103);
 }
 
 .active {
