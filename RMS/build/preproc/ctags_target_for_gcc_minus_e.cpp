@@ -498,7 +498,7 @@ void spiffWifiSetup()
   }
 
   // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Nov 12 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("09:51:33"))))));
+  rtc.adjust(DateTime(((reinterpret_cast<const __FlashStringHelper *>(("Nov 12 2022")))), ((reinterpret_cast<const __FlashStringHelper *>(("10:45:01"))))));
   rtc.start();
   pinMode(LED_BUILTIN, 0x03);
 }
@@ -746,6 +746,28 @@ void routesConfiguration()
   fanEnabled = false;
   logEvent("Fan Manual Control: Off");
   request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
+
+
+server.onNotFound([](AsyncWebServerRequest * request) {
+    if (request->url().endsWith(((reinterpret_cast<const __FlashStringHelper *>((".jpg")))))) {
+      // Extract the filename that was attempted
+      int fnsstart = request->url().lastIndexOf('/');
+      String fn = request->url().substring(fnsstart);
+      // Load the image from SPIFFS and send to the browser.
+      request->send(SPIFFS, fn, "image/jpeg", true);
+    }
+     if (request->url().endsWith(((reinterpret_cast<const __FlashStringHelper *>((".png")))))) {
+      // Extract the filename that was attempted
+      int fnsstart = request->url().lastIndexOf('/');
+      String fn = request->url().substring(fnsstart);
+      // Load the image from SPIFFS and send to the browser.
+      request->send(SPIFFS, fn, "image/png", true);
+
+    } else {
+      request->send(SPIFFS, "/404.html");
+    }
+  });
+
 }
 
 String getDateTime()
@@ -771,7 +793,7 @@ String processor(const String &var)
       if (var=="VARIABLEVALUE") { return "5";}
 
   */
-# 132 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+# 154 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
   if (var == "DATETIME")
   {
     String datetime = getDateTime();

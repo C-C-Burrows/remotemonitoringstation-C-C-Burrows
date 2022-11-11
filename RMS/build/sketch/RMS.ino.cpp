@@ -121,9 +121,9 @@ void renameFile(fs::FS &fs, const char * path1, const char * path2);
 void deleteFile(fs::FS &fs, const char * path);
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 void routesConfiguration();
-#line 114 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 136 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String getDateTime();
-#line 122 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 144 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String processor(const String &var);
 #line 74 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void setup()
@@ -730,6 +730,28 @@ void routesConfiguration()
   fanEnabled = false;
   logEvent("Fan Manual Control: Off");
   request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
+
+
+server.onNotFound([](AsyncWebServerRequest * request) {
+    if (request->url().endsWith(F(".jpg"))) {
+      // Extract the filename that was attempted
+      int fnsstart = request->url().lastIndexOf('/');
+      String fn = request->url().substring(fnsstart);
+      // Load the image from SPIFFS and send to the browser.
+      request->send(SPIFFS, fn, "image/jpeg", true);
+    }
+     if (request->url().endsWith(F(".png"))) {
+      // Extract the filename that was attempted
+      int fnsstart = request->url().lastIndexOf('/');
+      String fn = request->url().substring(fnsstart);
+      // Load the image from SPIFFS and send to the browser.
+      request->send(SPIFFS, fn, "image/png", true);
+    
+    } else {
+      request->send(SPIFFS, "/404.html");
+    }
+  });
+  
 }
 
 String getDateTime()

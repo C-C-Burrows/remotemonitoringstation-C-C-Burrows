@@ -109,6 +109,28 @@ void routesConfiguration()
   fanEnabled = false;
   logEvent("Fan Manual Control: Off");
   request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
+
+
+server.onNotFound([](AsyncWebServerRequest * request) {
+    if (request->url().endsWith(F(".jpg"))) {
+      // Extract the filename that was attempted
+      int fnsstart = request->url().lastIndexOf('/');
+      String fn = request->url().substring(fnsstart);
+      // Load the image from SPIFFS and send to the browser.
+      request->send(SPIFFS, fn, "image/jpeg", true);
+    }
+     if (request->url().endsWith(F(".png"))) {
+      // Extract the filename that was attempted
+      int fnsstart = request->url().lastIndexOf('/');
+      String fn = request->url().substring(fnsstart);
+      // Load the image from SPIFFS and send to the browser.
+      request->send(SPIFFS, fn, "image/png", true);
+    
+    } else {
+      request->send(SPIFFS, "/404.html");
+    }
+  });
+  
 }
 
 String getDateTime()
