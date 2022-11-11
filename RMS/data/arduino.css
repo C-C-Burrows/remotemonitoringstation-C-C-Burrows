@@ -23,12 +23,12 @@
 }
 
 body {
-    background-color: rgb(48, 162, 211);
+    background-color: rgba(131, 218, 255, 0.828);
     /*color: blue;*/
 }
 
 h1 {
-    background-color: rgb(47, 77, 169);
+    background-color: rgba(109, 142, 241, 0.636);
     color: rgb(187, 236, 235);
     text-align: center;
 }
@@ -40,7 +40,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: rgb(22, 84, 139);
+    background-color: rgb(19, 72, 118);
 }
 
 li {
@@ -49,7 +49,7 @@ li {
 
 li a {
     display: block;
-    color: rgb(141, 176, 209);
+    color: rgba(26, 76, 123, 0.713);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
