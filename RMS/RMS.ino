@@ -34,6 +34,7 @@ Adafruit_DCMotor *myMotor = AFMS.getMotor(3);
 
 bool fanEnabled = false;         // If the fan is on or off.
 bool automaticFanControl = true; // Automatic or manual control
+float fanTemperatureThreshold = 25;
 // Motor Shield END
 
 // ESP32Servo Start
@@ -168,8 +169,8 @@ void logEvent(String dataToLog)
   // Output the logEvents - FOR DEBUG ONLY. Comment out to avoid spamming the serial monitor.
   //  readFile(SPIFFS, "/logEvents.csv");
 
-  Serial.print("\nEvent Logged: ");
-  Serial.println(logEntry);
+  //Serial.print("\nEvent Logged: ");
+  //Serial.println(logEntry);
 }
 
 // Temp Code
@@ -246,7 +247,7 @@ void fanControl()
   if (automaticFanControl)
   {
     debugPrint("this is a auto fan");
-    automaticFan(25.0);
+    automaticFan(fanTemperatureThreshold);
   }
   else
   {

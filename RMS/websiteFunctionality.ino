@@ -1,13 +1,14 @@
+const char *PARAM_INPUT_1 = "tempThreshold";
+
 void routesConfiguration()
 {
-
   server.onNotFound([](AsyncWebServerRequest *request)
-                    { request->send(SPIFFS, "/404.html", "text/html"); });
+  { request->send(SPIFFS, "/404.html", "text/html"); });
 
   // Example of a 'standard' route
   // No Authentication
   server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
+  {
     logEvent("route: /");
     request->send(SPIFFS, "/index.html", "text/html"); });
 
@@ -30,7 +31,7 @@ void routesConfiguration()
   // And uses the processor function.
   server.on("/dashboard.html", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameGuest, passwordGuest))
       return request->requestAuthentication();
     debugPrint("In Dashbord Click");
     logEvent("Dashboard");
@@ -40,7 +41,7 @@ void routesConfiguration()
   // And uses the processor function.
   server.on("/admin", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameAdmin,passwordAdmin))
       return request->requestAuthentication();
     
     logEvent("Admin");
@@ -50,14 +51,14 @@ void routesConfiguration()
   // Also demonstrates how to have arduino functionality included (turn LED on)
   server.on("/LEDOn", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameGuest, passwordGuest))
       return request->requestAuthentication();
     LEDOn = true;
     request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
 
   server.on("/LEDOff", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameGuest, passwordGuest))
       return request->requestAuthentication();
     LEDOn = false;
     request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
@@ -65,14 +66,14 @@ void routesConfiguration()
   // Example of route which sets file to download - 'true' in send() command.
   server.on("/logOutput", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameGuest, passwordGuest))
       return request->requestAuthentication();
     logEvent("Log Event Download");
     request->send(SPIFFS, "/logEvents.csv", "text/html", true); });
 
   server.on("/SafeLock", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
     safeLocked = true;
   logEvent("Safe Locked via Website");
@@ -80,7 +81,7 @@ void routesConfiguration()
 
   server.on("/SafeUnlock", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
     safeLocked = false;
   logEvent("Safe Unlocked via Website");
@@ -88,7 +89,7 @@ void routesConfiguration()
 
   server.on("/FanControl", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
   automaticFanControl = !automaticFanControl;
   logEvent("Fan Manual Control: On");
@@ -96,7 +97,7 @@ void routesConfiguration()
 
   server.on("/FanManualOn", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
   fanEnabled = true;
   logEvent("Fan Manual Control: On");
@@ -104,33 +105,108 @@ void routesConfiguration()
 
   server.on("/FanManualOff", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
   fanEnabled = false;
   logEvent("Fan Manual Control: Off");
   request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
 
+  // Example of route with authentication, and use of processor
+  // Also demonstrates how to have arduino functionality included (turn LED on)
+  server.on("/LEDOnAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    if (!request->authenticate(usernameAdmin, passwordAdmin))
+      return request->requestAuthentication();
+    LEDOn = true;
+    request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
 
-server.onNotFound([](AsyncWebServerRequest * request) {
-    if (request->url().endsWith(F(".jpg"))) {
+  server.on("/LEDOffAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    if (!request->authenticate(usernameAdmin, passwordAdmin))
+      return request->requestAuthentication();
+    LEDOn = false;
+    request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  // Example of route which sets file to download - 'true' in send() command.
+  server.on("/logOutputAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    if (!request->authenticate(usernameAdmin, passwordAdmin))
+      return request->requestAuthentication();
+    logEvent("Log Event Download Admin");
+    request->send(SPIFFS, "/logEvents.csv", "text/html", true); });
+
+  server.on("/SafeLockAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+    safeLocked = true;
+  logEvent("Safe Locked via Website - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.on("/SafeUnlockAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+    safeLocked = false;
+  logEvent("Safe Unlocked via Website - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.on("/FanControlAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+  automaticFanControl = !automaticFanControl;
+  logEvent("Fan Manual Control: On - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.on("/FanManualOnAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+  fanEnabled = true;
+  logEvent("Fan Manual Control: On - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.on("/FanManualOffAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+  fanEnabled = false;
+  logEvent("Fan Manual Control: Off - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.onNotFound([](AsyncWebServerRequest *request)
+                    {
+    if (request->url().endsWith(F(".jpg")))
+    {
       // Extract the filename that was attempted
       int fnsstart = request->url().lastIndexOf('/');
       String fn = request->url().substring(fnsstart);
       // Load the image from SPIFFS and send to the browser.
       request->send(SPIFFS, fn, "image/jpeg", true);
     }
-     if (request->url().endsWith(F(".png"))) {
+    if (request->url().endsWith(F(".png")))
+    {
       // Extract the filename that was attempted
       int fnsstart = request->url().lastIndexOf('/');
       String fn = request->url().substring(fnsstart);
       // Load the image from SPIFFS and send to the browser.
       request->send(SPIFFS, fn, "image/png", true);
-    
-    } else {
-      request->send(SPIFFS, "/404.html");
     }
-  });
-  
+    else
+    {
+      request->send(SPIFFS, "/404.html");
+    } });
+
+  server.on("/setTemperatureThreshold", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  int newThreshold; 
+  if (request->hasParam(PARAM_INPUT_1)) {
+    fanTemperatureThreshold = request->getParam(PARAM_INPUT_1)->value().toFloat();
+    String logMessage = "Administrator set Automatic Fan Theshold to" + String(fanTemperatureThreshold);
+    logEvent(logMessage);
+  }
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
 }
 
 String getDateTime()
@@ -163,6 +239,20 @@ String processor(const String &var)
     float currentTemp = tempsensor.readTempC();
     int currentTempWholeNubmber = currentTemp;
     String currentTempString = String(currentTempWholeNubmber) + "°C.";
+    return String(currentTempString); // currentTempString;
+  }
+
+  // Default "catch" which will return nothing in case the HTML has no variable to replace.
+  if (var == "SETTEMP")
+  {
+
+    String currentTempString = String(fanTemperatureThreshold) + "°C.";
+    return String(currentTempString); // currentTempString;
+  }
+  if (var == "TEMPTHRES")
+  {
+
+    String currentTempString = String(fanTemperatureThreshold);
     return String(currentTempString); // currentTempString;
   }
 

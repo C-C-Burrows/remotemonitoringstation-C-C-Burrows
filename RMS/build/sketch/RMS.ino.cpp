@@ -36,6 +36,7 @@ Adafruit_DCMotor *myMotor = AFMS.getMotor(3);
 
 bool fanEnabled = false;         // If the fan is on or off.
 bool automaticFanControl = true; // Automatic or manual control
+float fanTemperatureThreshold = 25;
 // Motor Shield END
 
 // ESP32Servo Start
@@ -73,41 +74,41 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 boolean LEDOn = false; // State of Built-in LED true=on, false=off.
 #define LOOPDELAY 100
 
-#line 74 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 75 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void setup();
-#line 88 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 89 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void loop();
-#line 104 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 105 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void builtinLED();
-#line 124 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 125 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void debugPrint(String debugString);
-#line 135 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 136 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void debugPrint(String debugString, bool newline);
-#line 151 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 152 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void logEvent(String dataToLog);
-#line 177 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 178 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void readAndDisplayTemperature();
-#line 193 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 194 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void tftDrawText(String text, uint16_t color);
-#line 213 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 214 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void automaticFan(float temperatureThreshold);
-#line 239 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 240 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void fanControl();
-#line 258 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 259 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void manualFan();
-#line 280 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 281 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void windowBlinds();
-#line 313 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 314 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void readRFID();
-#line 351 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 352 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void temperatureSetup();
-#line 393 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 394 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void spiffWifiSetup();
-#line 445 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 446 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void motorSetup();
-#line 456 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 457 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void windowBlindSetup();
-#line 471 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 472 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void safeSubSytem();
 #line 2 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
 void readFile(fs::FS &fs, const char * path);
@@ -119,13 +120,13 @@ void appendFile(fs::FS &fs, const char * path, const char * message);
 void renameFile(fs::FS &fs, const char * path1, const char * path2);
 #line 62 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\spiffsFunctionality.ino"
 void deleteFile(fs::FS &fs, const char * path);
-#line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 3 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 void routesConfiguration();
-#line 136 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 212 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String getDateTime();
-#line 144 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+#line 220 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
 String processor(const String &var);
-#line 74 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
+#line 75 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\RMS.ino"
 void setup()
 {
   /*
@@ -223,8 +224,8 @@ void logEvent(String dataToLog)
   // Output the logEvents - FOR DEBUG ONLY. Comment out to avoid spamming the serial monitor.
   //  readFile(SPIFFS, "/logEvents.csv");
 
-  Serial.print("\nEvent Logged: ");
-  Serial.println(logEntry);
+  //Serial.print("\nEvent Logged: ");
+  //Serial.println(logEntry);
 }
 
 // Temp Code
@@ -301,7 +302,7 @@ void fanControl()
   if (automaticFanControl)
   {
     debugPrint("this is a auto fan");
-    automaticFan(25.0);
+    automaticFan(fanTemperatureThreshold);
   }
   else
   {
@@ -619,16 +620,17 @@ void deleteFile(fs::FS &fs, const char * path) {
 }
 
 #line 1 "c:\\Users\\CharlotteBurrows\\OneDrive - Friends and Family Dogfood ozburrows.com\\Documents\\GitHub\\remotemonitoringstation-C-C-Burrows\\RMS\\websiteFunctionality.ino"
+const char *PARAM_INPUT_1 = "tempThreshold";
+
 void routesConfiguration()
 {
-
   server.onNotFound([](AsyncWebServerRequest *request)
-                    { request->send(SPIFFS, "/404.html", "text/html"); });
+  { request->send(SPIFFS, "/404.html", "text/html"); });
 
   // Example of a 'standard' route
   // No Authentication
   server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
+  {
     logEvent("route: /");
     request->send(SPIFFS, "/index.html", "text/html"); });
 
@@ -651,7 +653,7 @@ void routesConfiguration()
   // And uses the processor function.
   server.on("/dashboard.html", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameGuest, passwordGuest))
       return request->requestAuthentication();
     debugPrint("In Dashbord Click");
     logEvent("Dashboard");
@@ -661,7 +663,7 @@ void routesConfiguration()
   // And uses the processor function.
   server.on("/admin", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameAdmin,passwordAdmin))
       return request->requestAuthentication();
     
     logEvent("Admin");
@@ -671,14 +673,14 @@ void routesConfiguration()
   // Also demonstrates how to have arduino functionality included (turn LED on)
   server.on("/LEDOn", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameGuest, passwordGuest))
       return request->requestAuthentication();
     LEDOn = true;
     request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
 
   server.on("/LEDOff", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameGuest, passwordGuest))
       return request->requestAuthentication();
     LEDOn = false;
     request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
@@ -686,14 +688,14 @@ void routesConfiguration()
   // Example of route which sets file to download - 'true' in send() command.
   server.on("/logOutput", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!request->authenticate(http_username, http_password))
+    if (!request->authenticate(usernameGuest, passwordGuest))
       return request->requestAuthentication();
     logEvent("Log Event Download");
     request->send(SPIFFS, "/logEvents.csv", "text/html", true); });
 
   server.on("/SafeLock", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
     safeLocked = true;
   logEvent("Safe Locked via Website");
@@ -701,7 +703,7 @@ void routesConfiguration()
 
   server.on("/SafeUnlock", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
     safeLocked = false;
   logEvent("Safe Unlocked via Website");
@@ -709,7 +711,7 @@ void routesConfiguration()
 
   server.on("/FanControl", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
   automaticFanControl = !automaticFanControl;
   logEvent("Fan Manual Control: On");
@@ -717,7 +719,7 @@ void routesConfiguration()
 
   server.on("/FanManualOn", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
   fanEnabled = true;
   logEvent("Fan Manual Control: On");
@@ -725,33 +727,108 @@ void routesConfiguration()
 
   server.on("/FanManualOff", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  if (!request->authenticate(http_username, http_password))
+  if (!request->authenticate(usernameGuest, passwordGuest))
     return request->requestAuthentication();
   fanEnabled = false;
   logEvent("Fan Manual Control: Off");
   request->send(SPIFFS, "/dashboard.html", "text/html", false, processor); });
 
+  // Example of route with authentication, and use of processor
+  // Also demonstrates how to have arduino functionality included (turn LED on)
+  server.on("/LEDOnAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    if (!request->authenticate(usernameAdmin, passwordAdmin))
+      return request->requestAuthentication();
+    LEDOn = true;
+    request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
 
-server.onNotFound([](AsyncWebServerRequest * request) {
-    if (request->url().endsWith(F(".jpg"))) {
+  server.on("/LEDOffAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    if (!request->authenticate(usernameAdmin, passwordAdmin))
+      return request->requestAuthentication();
+    LEDOn = false;
+    request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  // Example of route which sets file to download - 'true' in send() command.
+  server.on("/logOutputAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    if (!request->authenticate(usernameAdmin, passwordAdmin))
+      return request->requestAuthentication();
+    logEvent("Log Event Download Admin");
+    request->send(SPIFFS, "/logEvents.csv", "text/html", true); });
+
+  server.on("/SafeLockAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+    safeLocked = true;
+  logEvent("Safe Locked via Website - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.on("/SafeUnlockAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+    safeLocked = false;
+  logEvent("Safe Unlocked via Website - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.on("/FanControlAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+  automaticFanControl = !automaticFanControl;
+  logEvent("Fan Manual Control: On - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.on("/FanManualOnAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+  fanEnabled = true;
+  logEvent("Fan Manual Control: On - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.on("/FanManualOffAdmin", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  if (!request->authenticate(usernameAdmin, passwordAdmin))
+    return request->requestAuthentication();
+  fanEnabled = false;
+  logEvent("Fan Manual Control: Off - Admin");
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
+
+  server.onNotFound([](AsyncWebServerRequest *request)
+                    {
+    if (request->url().endsWith(F(".jpg")))
+    {
       // Extract the filename that was attempted
       int fnsstart = request->url().lastIndexOf('/');
       String fn = request->url().substring(fnsstart);
       // Load the image from SPIFFS and send to the browser.
       request->send(SPIFFS, fn, "image/jpeg", true);
     }
-     if (request->url().endsWith(F(".png"))) {
+    if (request->url().endsWith(F(".png")))
+    {
       // Extract the filename that was attempted
       int fnsstart = request->url().lastIndexOf('/');
       String fn = request->url().substring(fnsstart);
       // Load the image from SPIFFS and send to the browser.
       request->send(SPIFFS, fn, "image/png", true);
-    
-    } else {
-      request->send(SPIFFS, "/404.html");
     }
-  });
-  
+    else
+    {
+      request->send(SPIFFS, "/404.html");
+    } });
+
+  server.on("/setTemperatureThreshold", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+  int newThreshold; 
+  if (request->hasParam(PARAM_INPUT_1)) {
+    fanTemperatureThreshold = request->getParam(PARAM_INPUT_1)->value().toFloat();
+    String logMessage = "Administrator set Automatic Fan Theshold to" + String(fanTemperatureThreshold);
+    logEvent(logMessage);
+  }
+  request->send(SPIFFS, "/admin.html", "text/html", false, processor); });
 }
 
 String getDateTime()
@@ -784,6 +861,20 @@ String processor(const String &var)
     float currentTemp = tempsensor.readTempC();
     int currentTempWholeNubmber = currentTemp;
     String currentTempString = String(currentTempWholeNubmber) + "°C.";
+    return String(currentTempString); // currentTempString;
+  }
+
+  // Default "catch" which will return nothing in case the HTML has no variable to replace.
+  if (var == "SETTEMP")
+  {
+
+    String currentTempString = String(fanTemperatureThreshold) + "°C.";
+    return String(currentTempString); // currentTempString;
+  }
+  if (var == "TEMPTHRES")
+  {
+
+    String currentTempString = String(fanTemperatureThreshold);
     return String(currentTempString); // currentTempString;
   }
 

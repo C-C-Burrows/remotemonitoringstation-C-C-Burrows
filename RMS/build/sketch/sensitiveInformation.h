@@ -14,8 +14,8 @@ const char* ssid            = "TheClan-Home"; //"RoboRange";           // Wifi N
 const char* password        = "BurrowsClanHome3";   //"Password01";        // Wifi Password
 
 
-const char* http_username   = "admin";
-const char* http_password   = "admin";
+const char* usernameGuest   = "guest";
+const char* passwordGuest   = "123";
 
-const char* http_username2   = "Guest";
-const char* http_password2   = "Guest";
+const char* usernameAdmin  = "root";
+const char* passwordAdmin   = "password";
